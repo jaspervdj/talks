@@ -19,21 +19,68 @@
     \titlepage
 \end{frame}
 
-\begin{frame}{Hello!}
-My name is Jasper
-\end{frame}
+% Introduction
+% ------------
 
-\begin{frame}[t]
+\begin{frame}[t]{Hello!}
     \begin{picture}(0.0, 0.0)
     \put(160.0, -200.0){\includegraphics[width=0.5\textwidth]{hat.pdf}}
     \end{picture}
-
-    This is text before.
-
-    I work in a bar.
-
-    I learn English from a book.
+    My name is Jasper
 \end{frame}
+
+\begin{frame}{Overview}
+    \begin{itemize}
+        \item Why Haskell?
+        \item Haskell web frameworks/libraries
+        \item Case study: BlazeHtml
+    \end{itemize}
+\end{frame}
+
+% Why Haskell?
+% ------------
+
+\begin{frame}{Haskell on the server side}
+    \begin{itemize}
+        \item Highly scalable
+        \item Stateless/pure code
+        \item Robust: type system, testing
+    \end{itemize}
+\end{frame}
+
+% Haskell web frameworks/libraries
+% --------------------------------
+
+\begin{frame}{Happstack}
+    \begin{itemize}
+        \item Has been around for 6 years
+        \item Very mature
+        \item Complete stack
+        \item Yet flexible
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{WAI}
+
+    % Blank line here due to formatting
+    {\bf W}eb {\bf A}pplication {\bf I}nterface
+    \begin{itemize}
+        \item Connects server backend to application
+        \item Similar to Rack (Ruby)
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Warp}
+    A very fast web server
+    \begin{itemize}
+        \item Very fast (190k req/s)
+        \item Simple (500 loc)
+        \item Backend for \emph{WAI}
+    \end{itemize}
+\end{frame}
+
+% Case study: BlazeHtml
+% ---------------------
 
 \begin{frame}[fragile]{A sample slide}
 
