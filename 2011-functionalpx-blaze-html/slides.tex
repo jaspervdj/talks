@@ -1,0 +1,50 @@
+% slides.tex
+\documentclass[17pt]{beamer}
+\usetheme{default}
+\usecolortheme{dove}
+\useoutertheme{default}
+\usepackage{listings}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\begin{document}
+
+\lstset{language=Haskell}
+
+\title{BlazeHtml}
+\subtitle{A blazingly fast HTML combinator library}
+\author{Jasper Van der Jeugt}
+\date{March 18, 2011}
+
+\begin{frame}[plain]
+    \titlepage
+\end{frame}
+
+\begin{frame}{Hello!}
+My name is Jasper
+\end{frame}
+
+\begin{frame}[t]
+    \begin{picture}(0.0, 0.0)
+    \put(160.0, -200.0){\includegraphics[width=0.5\textwidth]{hat.pdf}}
+    \end{picture}
+
+    This is text before.
+
+    I work in a bar.
+
+    I learn English from a book.
+\end{frame}
+
+\begin{frame}[fragile]{A sample slide}
+
+Some code:
+
+\begin{lstlisting}
+fib :: [Int]
+fib 0 = 1
+fib n = fib (n - 2) + fib (n - 1)
+\end{lstlisting}
+
+\end{frame}
+
+\end{document}
