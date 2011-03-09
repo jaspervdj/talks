@@ -1,14 +1,26 @@
 % slides.tex
-\documentclass[17pt]{beamer}
+\documentclass[20pt]{beamer}
 \usetheme{default}
 \usecolortheme{dove}
 \useoutertheme{default}
 \usepackage{listings}
 \usepackage[utf8]{inputenc}
+\usepackage{color}
 \usepackage{graphicx}
-\begin{document}
 
-\lstset{language=Haskell}
+% Slightly smaller title
+\setbeamerfont{frametitle}{size=\large}
+\setbeamerfont{verb}{size=\small}
+
+% lst settings
+\lstset{
+    language=Haskell,
+    basicstyle=\small,
+    frame=single
+}
+
+
+\begin{document}
 
 \title{BlazeHtml}
 \subtitle{A blazingly fast HTML combinator library}
@@ -40,11 +52,20 @@
 % Why Haskell?
 % ------------
 
-\begin{frame}{Haskell on the server side}
+\begin{frame}{Web development: languages used}
     \begin{itemize}
+        \item PHP
+        \item Ruby
+        \item Python
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Haskell has an edge}
+    \begin{itemize}
+        \item Type-safe
+        \item Stateless
+        \item Compiled
         \item Highly scalable
-        \item Stateless/pure code
-        \item Robust: type system, testing
     \end{itemize}
 \end{frame}
 
@@ -53,7 +74,7 @@
 
 \begin{frame}{Happstack}
     \begin{itemize}
-        \item Has been around for 6 years
+        \item Has been around since 2003
         \item Very mature
         \item Complete stack
         \item Yet flexible
