@@ -1,12 +1,13 @@
 % slides.tex
 \documentclass[20pt]{beamer}
-\usetheme{default}
-\usecolortheme{dove}
-\useoutertheme{default}
 \usepackage{listings}
 \usepackage[utf8]{inputenc}
 \usepackage{color}
 \usepackage{graphicx}
+
+\usetheme{default}
+\usecolortheme{dove}
+\useoutertheme{default}
 
 % Slightly smaller title
 \setbeamerfont{frametitle}{size=\large}
@@ -15,15 +16,14 @@
 % lst settings
 \lstset{
     language=Haskell,
-    basicstyle=\small,
-    frame=single
+    basicstyle=\small
 }
 
 
 \begin{document}
 
 \title{BlazeHtml}
-\subtitle{A blazingly fast HTML combinator library}
+\subtitle{Blazingly fast HTML combinators}
 \author{Jasper Van der Jeugt}
 \date{March 18, 2011}
 
@@ -34,39 +34,69 @@
 % Introduction
 % ------------
 
-\begin{frame}[t]{Hello!}
+\begin{frame}{Hello!}
+    My name is Jasper \\
+    Student at UGent \\
+    I write Haskell \\
+    GhentFPG organizer
     \begin{picture}(0.0, 0.0)
-    \put(160.0, -200.0){\includegraphics[width=0.5\textwidth]{hat.pdf}}
+    \put(10.0, -40.0){\includegraphics[width=0.5\textwidth]{hat.pdf}}
     \end{picture}
-    My name is Jasper
 \end{frame}
 
 \begin{frame}{Overview}
-    \begin{itemize}
-        \item Why Haskell?
-        \item Haskell web frameworks/libraries
-        \item Case study: BlazeHtml
-    \end{itemize}
+    Why Haskell? \\
+    Haskell web frameworks/libraries \\
+    Case study: BlazeHtml
 \end{frame}
 
 % Why Haskell?
 % ------------
 
 \begin{frame}{Web development: languages used}
-    \begin{itemize}
-        \item PHP
-        \item Ruby
-        \item Python
-    \end{itemize}
+    PHP \\
+    Ruby \\
+    Python
 \end{frame}
 
 \begin{frame}{Haskell has an edge}
-    \begin{itemize}
-        \item Type-safe
-        \item Stateless
-        \item Compiled
-        \item Highly scalable
-    \end{itemize}
+    Type-safe \\
+    Stateless \\
+    Compiled \\
+    Highly scalable
+\end{frame}
+
+\begin{frame}[t, fragile]{Type safety}
+\vspace{5mm}
+Is this function error-prone?
+\begin{lstlisting}
+makeImage ::
+    Int -> Int -> Image
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Type safety}
+Can prevent many errors
+\begin{lstlisting}
+newtype Width = Width Int
+newtype Height = Height Int
+makeImage ::
+    Width -> Height -> Image
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Pure code}
+Explicit separation of pure and impure code \\
+\vspace{5mm}
+\begin{tabular}{l|l}
+    Pure         & Impure \\
+    Heavens      & Earth  \\
+    "Functional" & "Imperative"
+\end{tabular}
+\newline
+\vspace{5mm}
+
+Impure code can call pure code, but not vice versa
 \end{frame}
 
 % Haskell web frameworks/libraries
