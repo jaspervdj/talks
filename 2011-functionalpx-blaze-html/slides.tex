@@ -16,7 +16,8 @@
 % lst settings
 \lstset{
     language=Haskell,
-    basicstyle=\small
+    basicstyle=\small,
+    gobble=4
 }
 
 
@@ -45,13 +46,21 @@
 \end{frame}
 
 \begin{frame}{Overview}
+    \textbf{Introduction} \\
     Why Haskell? \\
-    Haskell web frameworks/libraries \\
+    Haskell web frameworks \\
     Case study: BlazeHtml
 \end{frame}
 
 % Why Haskell?
 % ------------
+
+\begin{frame}{Overview}
+    Introduction \\
+    \textbf{Why Haskell?} \\
+    Haskell web frameworks \\
+    Case study: BlazeHtml
+\end{frame}
 
 \begin{frame}{Web development: languages used}
     PHP \\
@@ -67,82 +76,76 @@
 \end{frame}
 
 \begin{frame}[t, fragile]{Type safety}
-\vspace{5mm}
-Is this function error-prone?
-\begin{lstlisting}
-makeImage ::
-    Int -> Int -> Image
-\end{lstlisting}
+    \vspace{5mm}
+    Is this function error-prone?
+    \begin{lstlisting}
+    makeImage ::
+        Int -> Int -> Image
+    \end{lstlisting}
 \end{frame}
 
 \begin{frame}[fragile]{Type safety}
-Can prevent many errors
-\begin{lstlisting}
-newtype Width = Width Int
-newtype Height = Height Int
-makeImage ::
-    Width -> Height -> Image
-\end{lstlisting}
+    Can prevent many errors
+    \begin{lstlisting}
+    newtype Width = Width Int
+    newtype Height = Height Int
+    makeImage ::
+        Width -> Height -> Image
+    \end{lstlisting}
 \end{frame}
 
 \begin{frame}{Pure code}
-Explicit separation of pure and impure code \\
-\vspace{5mm}
-\begin{tabular}{l|l}
-    Pure         & Impure \\
-    Heavens      & Earth  \\
-    "Functional" & "Imperative"
-\end{tabular}
-\newline
-\vspace{5mm}
+    Explicit separation of pure and impure code \\
+    \vspace{5mm}
+    \begin{tabular}{l|l}
+        Pure         & Impure \\
+        Heavens      & Earth  \\
+        "Functional" & "Imperative"
+    \end{tabular}
+    \newline
+    \vspace{5mm}
 
-Impure code can call pure code, but not vice versa
+    Impure code can call pure code, but not vice versa
 \end{frame}
 
 % Haskell web frameworks/libraries
 % --------------------------------
 
+\begin{frame}{Overview}
+    Introduction \\
+    Why Haskell? \\
+    \textbf{Haskell web frameworks} \\
+    Case study: BlazeHtml
+\end{frame}
+
 \begin{frame}{Happstack}
-    \begin{itemize}
-        \item Has been around since 2003
-        \item Very mature
-        \item Complete stack
-        \item Yet flexible
-    \end{itemize}
+    Has been around since 2003 \\
+    Very mature \\
+    Complete stack \\
+    Yet flexible
 \end{frame}
 
 \begin{frame}{WAI}
-
-    % Blank line here due to formatting
-    {\bf W}eb {\bf A}pplication {\bf I}nterface
-    \begin{itemize}
-        \item Connects server backend to application
-        \item Similar to Rack (Ruby)
-    \end{itemize}
+    \textbf{W}eb \textbf{A}pplication \textbf{I}nterface \\
+    Connects server backend to application \\
+    Similar to Rack (Ruby) \\
 \end{frame}
 
 \begin{frame}{Warp}
-    A very fast web server
-    \begin{itemize}
-        \item Very fast (190k req/s)
-        \item Simple (500 loc)
-        \item Backend for \emph{WAI}
-    \end{itemize}
+    A very fast web server \\
+    Handles 190k req/s \\
+    Simple (500 loc) \\
+    Backend for \emph{WAI} \\
 \end{frame}
 
 % Case study: BlazeHtml
 % ---------------------
 
-\begin{frame}[fragile]{A sample slide}
-
-Some code:
-
-\begin{lstlisting}
-fib :: [Int]
-fib 0 = 1
-fib n = fib (n - 2) + fib (n - 1)
-\end{lstlisting}
-
+\begin{frame}{Overview}
+    Introduction \\
+    Why Haskell? \\
+    Haskell web frameworks \\
+    \textbf{Case study: BlazeHtml} \\
 \end{frame}
 
 \end{document}
