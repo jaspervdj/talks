@@ -20,6 +20,9 @@
     gobble=4
 }
 
+\newcommand{\vspaced}{
+    \vspace{5mm}
+}
 
 \begin{document}
 
@@ -76,7 +79,7 @@
 \end{frame}
 
 \begin{frame}[t, fragile]{Type safety}
-    \vspace{5mm}
+    \vspaced
     Is this function error-prone?
     \begin{lstlisting}
     makeImage ::
@@ -96,14 +99,14 @@
 
 \begin{frame}{Pure code}
     Explicit separation of pure and impure code \\
-    \vspace{5mm}
+    \vspaced
     \begin{tabular}{l|l}
         Pure         & Impure \\
         Heavens      & Earth  \\
         "Functional" & "Imperative"
     \end{tabular}
     \newline
-    \vspace{5mm}
+    \vspaced
 
     Impure code can call pure code, but not vice versa
 \end{frame}
@@ -146,6 +149,54 @@
     Why Haskell? \\
     Haskell web frameworks \\
     \textbf{Case study: BlazeHtml} \\
+\end{frame}
+
+\begin{frame}{Webapp architecture}
+    HTML generation \\
+    Web application server \\
+    Data storage layer
+\end{frame}
+
+\begin{frame}[fragile]{Example}
+    \begin{lstlisting}
+    head $ do
+        title "Title"
+    body $ do
+        div ! class_ "fancy" $ do
+            "Literal"
+        div ! id "info" $ do
+            p "Content..."
+            p "More..."
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Build your own abstractions}
+    \begin{lstlisting}
+    includeJS source =
+     script ! type_ "text/javascript"
+            ! src source
+            $ mempty
+
+    includeJS "jquery.min.js"
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Embedded DSL}
+    Valid Haskell code
+\end{frame}
+
+\begin{frame}[fragile]{HTML representation}
+    \begin{lstlisting}
+    data Tree a
+        = Node a (Tree a) (Tree a)
+        | Empty
+    \end{lstlisting}
+    \vspaced
+    A simple, immutable data structure
+\end{frame}
+
+\begin{frame}{HTML is a tree}
+    Picture here
 \end{frame}
 
 \end{document}
