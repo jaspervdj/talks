@@ -42,9 +42,11 @@
     My name is Jasper \\
     Student at UGent \\
     I write Haskell \\
-    GhentFPG organizer
+    GhentFPG organizer \\
+    \texttt{@jaspervdj} \\
+    \texttt{jaspervdj.be}
     \begin{picture}(0.0, 0.0)
-    \put(10.0, -40.0){\includegraphics[width=0.5\textwidth]{hat.pdf}}
+    \put(40.0, -15.0){\includegraphics[width=0.5\textwidth]{images/hat.pdf}}
     \end{picture}
 \end{frame}
 
@@ -69,6 +71,7 @@
     PHP \\
     Ruby \\
     Python
+    % TODO: pic
 \end{frame}
 
 \begin{frame}{Haskell has an edge}
@@ -76,6 +79,7 @@
     Stateless \\
     Compiled \\
     Highly scalable
+    % TODO: lambda pic
 \end{frame}
 
 \begin{frame}[t, fragile]{Type safety}
@@ -85,6 +89,7 @@
     makeImage ::
         Int -> Int -> Image
     \end{lstlisting}
+    % TODO: Image width/height
 \end{frame}
 
 \begin{frame}[fragile]{Type safety}
@@ -121,6 +126,25 @@
     Case study: BlazeHtml
 \end{frame}
 
+\begin{frame}[fragile]{General web programming}
+    Something like
+    \begin{lstlisting}
+    app :: Request -> Response
+    \end{lstlisting}
+
+    \vspaced
+    Or rather
+    \begin{lstlisting}
+    app :: Request -> IO Response
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{WAI}
+    \textbf{W}eb \textbf{A}pplication \textbf{I}nterface \\
+    Connects server backend to application \\
+    Similar to Rack (Ruby) \\
+\end{frame}
+
 \begin{frame}{Happstack}
     Has been around since 2003 \\
     Very mature \\
@@ -128,10 +152,18 @@
     Yet flexible
 \end{frame}
 
-\begin{frame}{WAI}
-    \textbf{W}eb \textbf{A}pplication \textbf{I}nterface \\
-    Connects server backend to application \\
-    Similar to Rack (Ruby) \\
+\begin{frame}{Yesod}
+    Built on \emph{WAI} \\
+    Very high-level \\
+    Tightly integrated components \\
+    Focus on DSL's \\
+\end{frame}
+
+\begin{frame}{Snap Framework}
+    Relatively new \\
+    Sensible and clean \\
+    Fast and highly concurrent \\
+    Aims to be a complete framework \\
 \end{frame}
 
 \begin{frame}{Warp}
@@ -155,6 +187,14 @@
     HTML generation \\
     Web application server \\
     Data storage layer
+\end{frame}
+
+\begin{frame}{BlazeHtml}
+    Embedded in Haskell \\
+    Efficient Unicode support \\
+    Supports HTML 4 and HTML 5 \\
+    Pretty fast \\
+    Google Summer of Code 2010 \\
 \end{frame}
 
 \begin{frame}[fragile]{Example}
@@ -181,10 +221,6 @@
     \end{lstlisting}
 \end{frame}
 
-\begin{frame}{Embedded DSL}
-    Valid Haskell code
-\end{frame}
-
 \begin{frame}[fragile]{HTML representation}
     \begin{lstlisting}
     data Tree a
@@ -197,6 +233,67 @@
 
 \begin{frame}{HTML is a tree}
     Picture here
+    % TODO: Html tree picture
+\end{frame}
+
+\begin{frame}{Rendering}
+    Basically, flattening the tree to some string type
+    % TODO: Html -> String picture
+\end{frame}
+
+\begin{frame}[fragile]{Concatenating}
+    Builder Monoids: like Java StringBuilders, but different
+    \vspaced
+    \begin{lstlisting}[language=Java]
+    builder.append(someString)
+    \end{lstlisting}
+    \vspaced
+    For immutable data structures?
+\end{frame}
+
+\begin{frame}[fragile]{Builder Monoid}
+    Simple interface:
+    \vspaced
+    \begin{lstlisting}
+    mempty ::
+       Builder
+
+    mappend ::
+       Builder -> Builder -> Builder
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Implementation}
+    Simple interface:
+    \vspaced
+    \begin{lstlisting}
+    mempty ::
+       Builder
+
+    mappend ::
+       Builder -> Builder -> Builder
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile, b]{BigTable benchmark}
+    \begin{lstlisting}
+    bigTable :: Html
+    bigTable = table $
+      forM_ [1 .. 1000] $ \r -> tr $
+        forM_ [1 .. 10] $ \c -> td $
+          toHtml $ show (row, col)
+    \end{lstlisting}
+    \vspaced
+\end{frame}
+
+\begin{frame}{BigTable benchmark}
+    \begin{center}
+    \includegraphics[width=0.8\textwidth]{images/benchmarks.png}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Questions?}
+
 \end{frame}
 
 \end{document}
