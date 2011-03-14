@@ -236,6 +236,54 @@
     \end{lstlisting}
 \end{frame}
 
+\begin{frame}[fragile]{Syntactic sugar: do}
+    \texttt{do} notation works for every Monad
+    \vspaced
+    \begin{lstlisting}
+    do user <- getUser
+       cookie <- getCookie
+       touch cookie
+       check user cookie
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Syntactic sugar: do}
+    Translates into plain code using \texttt{>>}, \texttt{>>=}
+    and \texttt{return} operators
+    \vspaced
+    \begin{lstlisting}
+    user >>= \user ->
+     getCookie >>= \cookie ->
+      touch cookie >>
+       check user cookie
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Syntactic sugar: do}
+    This is an incredibly powerful feature for DSL's in Haskell! \\
+    \vspaced
+    Coined as: \\
+    \vspaced
+    \large{\textit{The programmable semicolon}}
+\end{frame}
+
+\begin{frame}[fragile]{Syntactic sugar: strings}
+    \texttt{OverloadedStrings} allows you to use literal strings wherever you
+    want \\
+    \vspaced
+    E.g. what is the type of
+    \begin{center}
+    \large{\texttt{"Hello world"}}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Syntactic sugar: strings}
+    % TODO: Pic with IsString instances
+    \begin{center}
+    \large{\texttt{"Hello world"}}
+    \end{center}
+\end{frame}
+
 \begin{frame}[fragile]{Build your own abstractions}
     \begin{lstlisting}
     includeJS source =
