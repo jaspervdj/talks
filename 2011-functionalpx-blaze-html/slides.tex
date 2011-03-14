@@ -139,6 +139,31 @@
     \end{lstlisting}
 \end{frame}
 
+\begin{frame}[fragile]{Routes}
+    Web framework provides routing, e.g.
+
+    \begin{lstlisting}
+    route
+      [ ("",          root)
+      , ("user/:id",  user)
+      , ("tweet/:id", tweet)
+      ]
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Monadic handlers}
+    Implementation of handlers:
+
+    \begin{lstlisting}
+      user = do
+        id' <- getParam "id"
+        user <- getFromDataBase id'
+        -- Perform pure operations
+        save user
+        set reponse
+    \end{lstlisting}
+\end{frame}
+
 \begin{frame}{WAI}
     \textbf{W}eb \textbf{A}pplication \textbf{I}nterface \\
     Connects server backend to application \\
@@ -195,6 +220,7 @@
     Supports HTML 4 and HTML 5 \\
     Pretty fast \\
     Google Summer of Code 2010 \\
+    By Simon Meier \& me
 \end{frame}
 
 \begin{frame}[fragile]{Example}
@@ -242,13 +268,16 @@
 \end{frame}
 
 \begin{frame}[fragile]{Concatenating}
-    Builder Monoids: like Java StringBuilders, but different
-    \vspaced
+    StringBuilder:
     \begin{lstlisting}[language=Java]
     builder.append(someString)
     \end{lstlisting}
     \vspaced
-    For immutable data structures?
+
+    Builder monoid
+    \begin{lstlisting}[language=Java]
+    builder1 `mappend` builder2
+    \end{lstlisting}
 \end{frame}
 
 \begin{frame}[fragile]{Builder Monoid}
@@ -264,15 +293,8 @@
 \end{frame}
 
 \begin{frame}[fragile]{Implementation}
-    Simple interface:
-    \vspaced
-    \begin{lstlisting}
-    mempty ::
-       Builder
-
-    mappend ::
-       Builder -> Builder -> Builder
-    \end{lstlisting}
+    % TODO: Builder pic
+    Pic here
 \end{frame}
 
 \begin{frame}[fragile, b]{BigTable benchmark}
