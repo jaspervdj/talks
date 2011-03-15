@@ -71,7 +71,7 @@
     PHP \\
     Ruby \\
     Python
-    % TODO: pic
+    % TODO: pic?
 \end{frame}
 
 \begin{frame}{Haskell has an edge}
@@ -79,17 +79,20 @@
     Stateless \\
     Compiled \\
     Highly scalable
-    % TODO: lambda pic
+    \begin{picture}(0.0, 0.0)
+    \put(40.0, -30.0){\includegraphics[width=0.3\textwidth]{images/lambda.pdf}}
+    \end{picture}
 \end{frame}
 
 \begin{frame}[t, fragile]{Type safety}
-    \vspaced
     Is this function error-prone?
     \begin{lstlisting}
     makeImage ::
         Int -> Int -> Image
     \end{lstlisting}
-    % TODO: Image width/height
+    \begin{center}
+    \includegraphics[width=0.8\textwidth]{images/image.pdf}
+    \end{center}
 \end{frame}
 
 \begin{frame}[fragile]{Type safety}
@@ -114,6 +117,16 @@
     \vspaced
 
     Impure code can call pure code, but not vice versa
+\end{frame}
+
+\begin{frame}[fragile]{Parallelism \& concurrency}
+    \begin{center}
+    \includegraphics[width=0.8\textwidth]{images/parallel.pdf}
+    \end{center}
+    Synchronization primitives: \texttt{MVar a} \\
+    Semi-explicit parallelism \\
+    High-performance event manager \\
+    \vspaced
 \end{frame}
 
 % Haskell web frameworks/libraries
