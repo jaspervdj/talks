@@ -291,7 +291,9 @@
 \end{frame}
 
 \begin{frame}{Syntactic sugar: strings}
-    % TODO: Pic with IsString instances
+    \begin{picture}(0.0, 0.0)
+    \put(20.0, -150.0){\includegraphics[width=0.9\textwidth]{images/isstring.pdf}}
+    \end{picture}
     \begin{center}
     \large{\texttt{"Hello world"}}
     \end{center}
@@ -354,14 +356,16 @@
     A simple, immutable data structure
 \end{frame}
 
-\begin{frame}{HTML is a tree}
-    Picture here
-    % TODO: Html tree picture
+\begin{frame}[plain]
+    \begin{center}
+    \includegraphics[height=1.0\textheight]{images/html-tree.pdf}
+    \end{center}
 \end{frame}
 
-\begin{frame}{Rendering}
-    Basically, flattening the tree to some string type
-    % TODO: Html -> String picture
+\begin{frame}[plain]
+    \begin{center}
+    \includegraphics[width=1.0\textwidth]{images/flatten.pdf}
+    \end{center}
 \end{frame}
 
 \begin{frame}[fragile]{Concatenating}
@@ -408,12 +412,14 @@
 \end{frame}
 
 \begin{frame}[fragile, b]{BigTable benchmark}
+    \begin{center}
+    \includegraphics[width=0.8\textwidth]{images/bigtable.pdf}
+    \end{center}
     \begin{lstlisting}
-    bigTable :: Html
     bigTable = table $
-      forM_ [1 .. 1000] $ \r -> tr $
+      replcateM_ 1000 $ tr $
         forM_ [1 .. 10] $ \c -> td $
-          toHtml $ show (row, col)
+          toHtml c
     \end{lstlisting}
     \vspaced
 \end{frame}
@@ -425,7 +431,7 @@
 \end{frame}
 
 \begin{frame}{Questions?}
-
+    % TODO: Pic?
 \end{frame}
 
 \end{document}
