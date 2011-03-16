@@ -297,6 +297,42 @@
     \end{center}
 \end{frame}
 
+\begin{frame}{Multiple renderers}
+    \texttt{String} ~ (= \texttt{[Char]}) \\
+    \texttt{ByteString} ~ (\texttt{UTF-8}? \texttt{Latin-1}?)
+    \texttt{Text} ~ (Lazy or Strict?)
+\end{frame}
+
+\begin{frame}[fragile]{Lazy evaluation}
+    \begin{lstlisting}
+    let x = sum [1 .. 20000]
+    in if var then x else y
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Lazy evaluation}
+    \texttt{x} is calculated when...
+    \vspaced
+    \begin{lstlisting}
+    if x > 5 then ...
+    print x
+    seq x y
+    ...
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Lazy renderers}
+    Keep more than strictly necessary
+    \vspaced
+    \begin{lstlisting}
+    data StaticString = StaticString
+        { string :: String -> String
+        , utf8   :: S.ByteString
+        , utf16  :: Text
+        }
+    \end{lstlisting}
+\end{frame}
+
 \begin{frame}[fragile]{Build your own abstractions}
     \begin{lstlisting}
     includeJS source =
