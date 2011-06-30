@@ -142,6 +142,32 @@
     \end{lstlisting}
 \end{frame}
 
+\begin{frame}{Strictness analysis}
+    Some notes about seq
+\end{frame}
+
+\begin{frame}[fragile]{Strictness analysis}
+    Right usage
+    \vspaced
+    \begin{lstlisting}
+    f x = x `seq` g x
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Strictness analysis}
+    \textbf{Wrong} usage
+    \vspaced
+    \begin{lstlisting}
+    x `seq` x
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Strictness analysis}
+    Most important: \texttt{seq} is no magic! \\
+    \textit{Translates} to a \texttt{case} statement
+\end{frame}
+
+
 % Unboxed types
 % -------------
 
