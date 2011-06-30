@@ -55,6 +55,96 @@
     Herp derp
 \end{frame}
 
+% Strictness analysis
+% -------------------
+
+\begin{frame}{Strictness analysis}
+    Haskell has lazy evaluation as default
+\end{frame}
+
+\begin{frame}{Strictness analysis}
+    Lazy evaluation leads to more composable code \\
+    \vspaced
+    Disadvantage: too much laziness
+\end{frame}
+
+\begin{frame}[fragile]{Strictness analysis}
+    A function can be strict in it's arguments
+    \vspaced
+    \begin{lstlisting}
+    null :: [a] -> Bool
+    null [] = True
+    null _  = False
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Strictness analysis}
+    \begin{lstlisting}
+    hello :: String -> String
+    hello name =
+      "Hello, " ++ name ++ "!"
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Strictness analysis}
+    \begin{lstlisting}
+    quadr :: Floating a
+          => a -> a -> a -> a -> a
+    quadr a b c x =
+      a * x ^ 2 + b * x + c
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Strictness analysis}
+    \begin{lstlisting}
+    if' :: Bool -> a -> a -> a
+    if' True  x _ = x
+    if' False _ y = y
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Strictness analysis}
+    \begin{lstlisting}
+    maybe ::
+      b -> (a -> b) -> Maybe a -> b
+    maybe d _ Nothing  = d
+    maybe _ f (Just x) = f x
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Strictness analysis}
+    Functions can easily be made strict \\
+    \vspaced
+    \begin{lstlisting}
+    seq :: a -> b -> b
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Strictness analysis}
+    \begin{lstlisting}
+    quadr :: Floating a
+          => a -> a -> a -> a -> a
+    quadr a b c x =
+      a `seq` b `seq` c `seq`
+        a * x ^ 2 + b * x + c
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Strictness analysis}
+    Useful syntactic sugar \\
+    \vspaced
+    \begin{lstlisting}
+    {-# LANGUAGE BangPatterns #-}
+    quadr :: Floating a
+          => a -> a -> a -> a -> a
+    quadr !a !b !c x =
+      a * x ^ 2 + b * x + c
+    \end{lstlisting}
+\end{frame}
+
+% Unboxed types
+% -------------
+
 % Benchmarking pitfalls
 % ---------------------
 
@@ -242,5 +332,8 @@
     \vspaced
     \textbf{GHC is pretty smart as well}
 \end{frame}
+
+% GHC Core
+% --------
 
 \end{document}
