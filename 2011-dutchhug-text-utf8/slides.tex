@@ -26,10 +26,10 @@
 
 \begin{document}
 
-\title{Introduction to optimizing Haskell code}
-\subtitle{8th GhentFPG meeting}
+\title{Porting Text to UTF-8}
+\subtitle{Dutch Haskell User Group}
 \author{Jasper Van der Jeugt}
-\date{May 30, 2011}
+\date{July 14, 2011}
 
 \begin{frame}[plain]
     \titlepage
@@ -60,144 +60,182 @@
 \end{frame}
 
 \begin{frame}{Overview}
-    \textbf{Introduction} \\
-    Strictness analysis \\
-    Benchmarking pitfalls \\
-    GHC Core \\
+    % TODO
 \end{frame}
 
-% Strictness analysis
-% -------------------
+% UTF-8 vs. UTF-16
+% ----------------
 
-\begin{frame}{Overview}
-    Introduction \\
-    \textbf{Strictness analysis} \\
-    Benchmarking pitfalls \\
-    GHC Core \\
-\end{frame}
-
-\begin{frame}{Strictness analysis}
-    Haskell has lazy evaluation as default
-\end{frame}
-
-\begin{frame}{Strictness analysis}
-    Lazy evaluation leads to more composable code \\
+\begin{frame}{UTF-8 vs. UTF-16}
+    \textbf{Number of unicode characters?} \\
     \vspaced
-    Disadvantage: too much laziness
+    17 planes \\
+    Each plane: $2^{16}$ characters \\
 \end{frame}
 
-\begin{frame}[fragile]{Strictness analysis}
-    A function can be strict in it's arguments
+\begin{frame}{UTF-8 vs. UTF-16}
+    \textbf{Number of unicode characters?} \\
     \vspaced
-    \begin{lstlisting}
-    null :: [a] -> Bool
-    null [] = True
-    null _  = False
-    \end{lstlisting}
+    $\log_2(17 * 2^{16}) = 20.087...$ characters \\
+    \vspaced
+    21 bits per character \\
 \end{frame}
 
-\begin{frame}[fragile]{Strictness analysis}
-    \begin{lstlisting}
-    hello :: String -> String
-    hello name =
-      "Hello, " ++ name ++ "!"
-    \end{lstlisting}
+\begin{frame}{UTF-8 vs. UTF-16}
+    \textbf{Number of unicode characters?} \\
+    \vspaced
+    $\log_2(17 * 2^{16}) = 20.087...$ characters \\
+    \vspaced
+    21 bits per character \\
 \end{frame}
 
-\begin{frame}[fragile]{Strictness analysis}
-    \begin{lstlisting}
-    quadr :: Floating a
-          => a -> a -> a -> a -> a
-    quadr a b c x =
-      a * x ^ 2 + b * x + c
-    \end{lstlisting}
-\end{frame}
-
-\begin{frame}[fragile]{Strictness analysis}
-    \begin{lstlisting}
-    if' :: Bool -> a -> a -> a
-    if' True  x _ = x
-    if' False _ y = y
-    \end{lstlisting}
-\end{frame}
-
-\begin{frame}[fragile]{Strictness analysis}
-    \begin{lstlisting}
-    maybe ::
-      b -> (a -> b) -> Maybe a -> b
-    maybe d _ Nothing  = d
-    maybe _ f (Just x) = f x
-    \end{lstlisting}
-\end{frame}
-
-\begin{frame}[fragile]{Strictness analysis}
-    Functions can easily be made strict \\
+\begin{frame}[fragile]{UTF-8 vs. UTF-16}
+    \textbf{Strings is (often) a bad choice} \\
     \vspaced
     \begin{lstlisting}
-    seq :: a -> b -> b
+    data Char = C# Char#
     \end{lstlisting}
+    \texttt{C\#}: word \\
+    \texttt{Char\#}: 32 bits \\
 \end{frame}
 
-\begin{frame}[fragile]{Strictness analysis}
-    \begin{lstlisting}
-    quadr :: Floating a
-          => a -> a -> a -> a -> a
-    quadr a b c x =
-      a `seq` b `seq` c `seq`
-        a * x ^ 2 + b * x + c
-    \end{lstlisting}
-\end{frame}
-
-\begin{frame}[fragile]{Strictness analysis}
-    Useful syntactic sugar \\
+\begin{frame}[fragile]{UTF-8 vs. UTF-16}
+    \textbf{Strings is (often) a bad choice} \\
     \vspaced
     \begin{lstlisting}
-    {-# LANGUAGE BangPatterns #-}
-    quadr :: Floating a
-          => a -> a -> a -> a -> a
-    quadr !a !b !c x =
-      a * x ^ 2 + b * x + c
+    data [] a = [] | a : [a]
     \end{lstlisting}
 \end{frame}
 
-\begin{frame}{Strictness analysis}
-    Some notes about seq
+%TODO: String illustration
+
+\begin{frame}{UTF-8 vs. UTF-16}
+    Two points: \\
+    \begin{enumerate}
+    \item Use strict arrays
+    \item Don't use a 32-bit encoding
+    \end{enumerate}
 \end{frame}
 
-\begin{frame}[fragile]{Strictness analysis}
-    Right usage
+\begin{frame}{UTF-8 vs. UTF-16}
+    \textbf{UTF-8} \\
+    \vspaced
+    % TODO: UTF-8 illustration
+\end{frame}
+
+\begin{frame}{UTF-8 vs. UTF-16}
+    \textbf{UTF-16} \\
+    \vspaced
+    % TODO: UTF-16 illustration
+\end{frame}
+
+\begin{frame}{UTF-8 vs. UTF-16}
+    Two points:
+    \begin{enumerate}
+    \item Some things are inherently faster using UTF-8
+    \item Some things are inherently faster using UTF-16
+    \end{enumerate}
+\end{frame}
+
+% Porting Text to UTF-8
+% ---------------------
+
+\begin{frame}[fragile]{Porting Text to UTF-8}
+    \begin{lstlisting}
+    encodeUtf8 :: Text -> ByteString
+    \end{lstlisting}
+    \vspaced
+    Implementation very simple
+\end{frame}
+
+\begin{frame}[fragile]{Porting Text to UTF-8}
+    \begin{lstlisting}
+    encodeUtf8 (Text arr off len) =
+      unsafePerformIO $ do
+        fp <- mallocByteString len
+        withForeignPtr fp $ <memcpy>
+        return $! PS fp 0 len
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Porting Text to UTF-8}
+    \begin{lstlisting}
+    decodeUtf8 :: ByteString -> Text
+    \end{lstlisting}
+    \vspaced
+    Very important to validate first!
+\end{frame}
+
+\begin{frame}{Porting Text to UTF-8}
+    \texttt{decodeUtf8}
+    % TODO: decodeUtf8 pic
+\end{frame}
+
+\begin{frame}[fragile]{Porting Text to UTF-8}
+    Implementations of \texttt{map}, \texttt{filter}...
     \vspaced
     \begin{lstlisting}
-    f x = x `seq` g x
+    stream   :: Text -> Stream Char
+    unstream :: Stream Char -> Text
     \end{lstlisting}
 \end{frame}
 
-\begin{frame}[fragile]{Strictness analysis}
-    \textbf{Wrong} usage
+\begin{frame}[fragile]{Porting Text to UTF-8}
+    \begin{lstlisting}
+    data Stream a =
+        forall s. Stream
+        (s -> Step s a) -- stepper
+        !s              -- state
+        !Size           -- size hint
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Porting Text to UTF-8}
+    \begin{lstlisting}
+    data Step s a
+        = Done
+        | Skip !s
+        | Yield !a !s
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Porting Text to UTF-8}
+    Most functions written as:
     \vspaced
     \begin{lstlisting}
-    x `seq` x
+    f :: Text -> Text
+    f = unstream . f' . stream
     \end{lstlisting}
 \end{frame}
 
-\begin{frame}[fragile]{Strictness analysis}
-    Most important: \texttt{seq} is no magic! \\
-    \textit{Translates} to a \texttt{case} statement
+\begin{frame}[fragile]{Porting Text to UTF-8}
+    \begin{lstlisting}
+    f = unstream . f' . stream
+    g = unstream . g' . stream
+    \end{lstlisting}
+    \vspaced
+    Stream fusion: \\
+    \begin{lstlisting}
+    f . g =
+        unstream . f' . g' . stream
+    \end{lstlisting}
 \end{frame}
 
-
-% Unboxed types
-% -------------
+\begin{frame}[fragile]{Porting Text to UTF-8}
+    These are not the only streaming combinators...
+    \vspaced
+    \begin{lstlisting}
+    stream . decodeUtf8 = streamUtf8
+    \end{lstlisting}
+    \vspaced
+    \begin{lstlisting}
+    streamUtf8 ::
+        ByteString -> Stream Char
+    \end{lstlisting}
+\end{frame}
 
 % Benchmarking pitfalls
 % ---------------------
-
-\begin{frame}{Overview}
-    Introduction \\
-    Strictness analysis \\
-    \textbf{Benchmarking pitfalls} \\
-    GHC Core \\
-\end{frame}
 
 \begin{frame}{Benchmarking pitfalls}
     Haskell is a lazy language \\
@@ -386,13 +424,6 @@
 
 % GHC Core
 % --------
-
-\begin{frame}{Overview}
-    Introduction \\
-    Strictness analysis \\
-    Benchmarking pitfalls \\
-    \textbf{GHC Core} \\
-\end{frame}
 
 \begin{frame}{GHC Core}
     What is GHC Core? \\
