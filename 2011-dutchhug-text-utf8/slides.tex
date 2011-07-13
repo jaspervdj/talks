@@ -54,17 +54,33 @@
 \begin{frame}{Overview}
     Credit where credit is due \\
     \vspaced
-    \textit{High-Performance Haskell} \\
-    (And general advice) \\
-    Johan Tibell
+    \textit{High-Performance Haskell}, advice \\
+    Johan Tibell \\
+    \vspaced
+    Mentoring \\
+    Edward Kmett
 \end{frame}
 
 \begin{frame}{Overview}
-    % TODO
+    \textbf{Introduction} \\
+    UTF-8 vs. UTF-16 \\
+    Porting Text to UTF-8 \\
+    Benchmarking pitfalls \\
+    GHC Core \\
+    Results
 \end{frame}
 
 % UTF-8 vs. UTF-16
 % ----------------
+
+\begin{frame}{Overview}
+    Introduction \\
+    \textbf{UTF-8 vs. UTF-16} \\
+    Porting Text to UTF-8 \\
+    Benchmarking pitfalls \\
+    GHC Core \\
+    Results
+\end{frame}
 
 \begin{frame}{UTF-8 vs. UTF-16}
     \textbf{Number of unicode characters?} \\
@@ -107,7 +123,11 @@
     \end{lstlisting}
 \end{frame}
 
-%TODO: String illustration
+\begin{frame}{UTF-8 vs. UTF-16}
+    \begin{center}
+    \includegraphics[width=\textwidth]{images/string.pdf}
+    \end{center}
+\end{frame}
 
 \begin{frame}{UTF-8 vs. UTF-16}
     Two points: \\
@@ -118,15 +138,15 @@
 \end{frame}
 
 \begin{frame}{UTF-8 vs. UTF-16}
-    \textbf{UTF-8} \\
-    \vspaced
-    % TODO: UTF-8 illustration
+    \begin{center}
+    \includegraphics[width=0.9\textwidth]{images/utf8.pdf}
+    \end{center}
 \end{frame}
 
 \begin{frame}{UTF-8 vs. UTF-16}
-    \textbf{UTF-16} \\
-    \vspaced
-    % TODO: UTF-16 illustration
+    \begin{center}
+    \includegraphics[width=0.9\textwidth]{images/utf16.pdf}
+    \end{center}
 \end{frame}
 
 \begin{frame}{UTF-8 vs. UTF-16}
@@ -139,6 +159,15 @@
 
 % Porting Text to UTF-8
 % ---------------------
+
+\begin{frame}{Overview}
+    Introduction \\
+    UTF-8 vs. UTF-16 \\
+    \textbf{Porting Text to UTF-8} \\
+    Benchmarking pitfalls \\
+    GHC Core \\
+    Results
+\end{frame}
 
 \begin{frame}[fragile]{Porting Text to UTF-8}
     \begin{lstlisting}
@@ -167,8 +196,11 @@
 \end{frame}
 
 \begin{frame}{Porting Text to UTF-8}
-    \texttt{decodeUtf8}
-    % TODO: decodeUtf8 pic
+    \texttt{decodeUtf8 =}
+    \vspaced
+    \begin{center}
+    \includegraphics[width=\textwidth]{images/decode.pdf}
+    \end{center}
 \end{frame}
 
 \begin{frame}[fragile]{Porting Text to UTF-8}
@@ -236,6 +268,15 @@
 
 % Benchmarking pitfalls
 % ---------------------
+
+\begin{frame}{Overview}
+    Introduction \\
+    UTF-8 vs. UTF-16 \\
+    Porting Text to UTF-8 \\
+    \textbf{Benchmarking pitfalls} \\
+    GHC Core \\
+    Results
+\end{frame}
 
 \begin{frame}{Benchmarking pitfalls}
     Haskell is a lazy language \\
@@ -425,6 +466,15 @@
 % GHC Core
 % --------
 
+\begin{frame}{Overview}
+    Introduction \\
+    UTF-8 vs. UTF-16 \\
+    Porting Text to UTF-8 \\
+    Benchmarking pitfalls \\
+    \textbf{GHC Core} \\
+    Results
+\end{frame}
+
 \begin{frame}{GHC Core}
     What is GHC Core? \\
     Why should we care?
@@ -472,6 +522,34 @@
 
 \begin{frame}{GHC Core}
     \textbf{Demo}
+\end{frame}
+
+% Results
+% -------
+
+\begin{frame}{Overview}
+    Introduction \\
+    UTF-8 vs. UTF-16 \\
+    Porting Text to UTF-8 \\
+    Benchmarking pitfalls \\
+    GHC Core \\
+    \textbf{Results}
+\end{frame}
+
+\begin{frame}[fragile]{Results}
+    \begin{lstlisting}
+    text <- T.decodeUtf8 <$>
+      B.readFile filePath
+
+    B.putStr $ T.encodeUtf8 $
+      T.toUpper text
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Results}
+    \begin{center}
+    \includegraphics[width=0.75\textwidth]{images/upper.pdf}
+    \end{center}
 \end{frame}
 
 \begin{frame}[plain]
