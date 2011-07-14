@@ -92,21 +92,19 @@
 \begin{frame}{UTF-8 vs. UTF-16}
     \textbf{Number of unicode characters?} \\
     \vspaced
-    $\log_2(17 * 2^{16}) = 20.087...$ characters \\
-    \vspaced
-    21 bits per character \\
+    $17 * 2^{16}$ characters \\
 \end{frame}
 
 \begin{frame}{UTF-8 vs. UTF-16}
-    \textbf{Number of unicode characters?} \\
+    \textbf{Number of bits needed?} \\
     \vspaced
-    $\log_2(17 * 2^{16}) = 20.087...$ characters \\
+    $\log_2(17 * 2^{16}) = 20.087...$ \\
     \vspaced
     21 bits per character \\
 \end{frame}
 
 \begin{frame}[fragile]{UTF-8 vs. UTF-16}
-    \textbf{Strings is (often) a bad choice} \\
+    \textbf{String is (often) a bad choice} \\
     \vspaced
     \begin{lstlisting}
     data Char = C# Char#
@@ -116,7 +114,7 @@
 \end{frame}
 
 \begin{frame}[fragile]{UTF-8 vs. UTF-16}
-    \textbf{Strings is (often) a bad choice} \\
+    \textbf{String is (often) a bad choice} \\
     \vspaced
     \begin{lstlisting}
     data [] a = [] | a : [a]
