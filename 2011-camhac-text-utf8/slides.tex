@@ -26,7 +26,7 @@
 
 \begin{document}
 
-\title{Porting Text to UTF-8}
+\title{GSoC: Text/UTF-8}
 \subtitle{CamHac}
 \author{Jasper Van der Jeugt}
 \date{August 14, 2011}
@@ -157,8 +157,11 @@
 \begin{frame}{Unicode crash course}
     Results depend on:
     \begin{enumerate}
-    \item The application
-    \item The language
+    \vspaced
+    \item The application (e.g. lots of processing vs. static in-memory
+    database)
+    \vspaced
+    \item The language (e.g. English vs. Japanese)
     \end{enumerate}
 \end{frame}
 
@@ -172,7 +175,7 @@
     \textbf{Results} \\
 \end{frame}
 
-\begin{frame}[fragile]{Results}
+\begin{frame}[fragile]{Results: pure functions}
     \begin{lstlisting}
     stream   :: Text -> Stream Char
     unstream :: Stream Char -> Text
@@ -184,7 +187,7 @@
     \end{lstlisting}
 \end{frame}
 
-\begin{frame}[fragile]{Results}
+\begin{frame}[fragile]{Results: pure functions}
     \begin{lstlisting}
     map :: (Char -> Char)
         -> Text -> Text
@@ -192,10 +195,10 @@
         unstream . map' f . stream
     \end{lstlisting}
     \vspaced
-    ``\textit{Generally}'' a little slower
+    ``\textit{Generally}'' a little slower for UTF-8
 \end{frame}
 
-\begin{frame}[fragile]{Results}
+\begin{frame}[fragile]{Results: applications}
     \begin{lstlisting}
     program :: ByteString
             -> ByteString
@@ -204,19 +207,7 @@
             . decodeUtf8
     \end{lstlisting}
     \vspaced
-    Comparable to many ``\textit{real-world}'' applications
-\end{frame}
-
-\begin{frame}[fragile]{Results}
-    \begin{lstlisting}
-    program :: ByteString
-            -> ByteString
-    program = encodeUtf8
-            . map someF
-            . decodeUtf8
-    \end{lstlisting}
-    \vspaced
-    ``\textit{Generally}'' a little faster
+    ``\textit{Generally}'' a little faster for UTF-8
 \end{frame}
 
 \begin{frame}{Results}
@@ -225,6 +216,21 @@
     Integrate with C libraries (e.g. \texttt{pcre}) \\
     Reduced memory usage \\
     Fast output path (for e.g. \texttt{aeson}) \\
+\end{frame}
+
+\begin{frame}{Results}
+    \textbf{GSoC: progress} \\
+    \vspaced
+    \begin{tabular}{ll}
+    Conversion:     & done \\
+    Optimization:   & done* \\
+    Summary report: & in progress \\
+    Switch:         & ? \\
+    \end{tabular}
+    \newline
+    \newline
+    \vspaced
+    *\small{\textit{always room for improvement}} \\
 \end{frame}
 
 \begin{frame}[plain]
