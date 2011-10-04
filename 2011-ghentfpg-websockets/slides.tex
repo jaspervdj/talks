@@ -1,0 +1,74 @@
+% slides.tex
+\documentclass[20pt]{beamer}
+\usepackage{listings}
+\usepackage[utf8]{inputenc}
+\usepackage{color}
+\usepackage{graphicx}
+
+\usetheme{default}
+\usecolortheme{dove}
+\useoutertheme{default}
+
+% Slightly smaller title
+\setbeamerfont{frametitle}{size=\large}
+\setbeamerfont{verb}{size=\small}
+
+% lst settings
+\lstset{
+    language=Haskell,
+    basicstyle=\small,
+    gobble=4
+}
+
+\newcommand{\vspaced}{
+    \vspace{5mm}
+}
+
+\begin{document}
+
+\title{WebSockets}
+\subtitle{GhentFPG}
+\author{Jasper Van der Jeugt}
+\date{October 4, 2011}
+
+\begin{frame}[plain]
+    \titlepage
+\end{frame}
+
+\begin{frame}{WebSockets}
+    Bidirectional, real-time communication between the browser and the server
+\end{frame}
+
+\begin{frame}{WebSockets}
+    Chatting is allowed during this talk: \\
+    \small{\texttt{jaspervdj.be/websockets-example}} \\
+    \vspaced
+    Works in: Firefox $\geq 6$, Chromium $\geq 14$
+\end{frame}
+
+\begin{frame}[fragile]{Client-side: JavaScript}
+    \begin{lstlisting}
+    var ws = new WebSocket(uri);
+
+    ws.onmessage = function(event) {
+        alert(event.data);
+    }
+
+    ws.onopen = function() {
+        ws.send('Hello, server.');
+    }
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Server-side: WebSockets library}
+    Built around enumerator/iteratee \\
+    Safe asynchronous sending \\
+    Integrates with existing frameworks \\
+    Easy to learn and use \\
+\end{frame}
+
+\begin{frame}[plain]
+    Let's look at some code!
+\end{frame}
+
+\end{document}
