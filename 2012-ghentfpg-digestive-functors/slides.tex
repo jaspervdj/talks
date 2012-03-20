@@ -1,0 +1,138 @@
+% slides.tex
+\documentclass[20pt]{beamer}
+\usepackage{listings}
+\usepackage[utf8]{inputenc}
+\usepackage{color}
+\usepackage{graphicx}
+
+\usetheme{default}
+\usecolortheme{dove}
+\useoutertheme{default}
+
+% Slightly smaller title
+\setbeamerfont{frametitle}{size=\large}
+\setbeamerfont{verb}{size=\small}
+
+% lst settings
+\lstset{
+    language=Haskell,
+    basicstyle=\small,
+    gobble=4
+}
+
+\newcommand{\vspaced}{
+    \vspace{5mm}
+}
+
+\begin{document}
+
+\title{Digestive Functors 0.3}
+\subtitle{GhentFPG}
+\author{Jasper Van der Jeugt}
+\date{March 20, 2012}
+
+\begin{frame}[plain]
+    \titlepage
+\end{frame}
+
+% Introduction
+% ------------
+
+\begin{frame}{Hello!}
+    My name is Jasper \\
+    Student at UGent \\
+    I write Haskell \\
+    GhentFPG \\
+    \texttt{@jaspervdj} \\
+    \texttt{jaspervdj.be}
+    \begin{picture}(0.0, 0.0)
+    \put(40.0, -15.0){
+        \includegraphics[width=0.5\textwidth]{../2011-functionalpx-blaze-html/images/hat.pdf}}
+    \end{picture}
+\end{frame}
+
+% What are formlets?
+% ------------------
+
+\begin{frame}{Overview}
+    \textbf{What are formlets?} \\
+\end{frame}
+
+\begin{frame}{What are formlets?}
+    Coined in a 2008 paper \\
+    \vspaced
+    \emph{The essence of form abstraction} \\
+    \vspaced
+    Ezra Cooper, Sam Lindley, Philip Wadler, and Jeremy Yallop.
+\end{frame}
+
+\begin{frame}{What are formlets?}
+    Idea: forms written using an \emph{Applicative Functor} approach are
+    \emph{inherently composable}.
+\end{frame}
+
+\begin{frame}[fragile]{What are formlets?}
+    \begin{lstlisting}
+    data Date = Date
+        { month :: Integer
+        , day   :: Integer
+        } deriving (Show)
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{What are formlets?}
+    \begin{lstlisting}
+    validDate :: Date -> Bool
+    validDate (Date m d) =
+        m `elem` [1 .. 12] &&
+        d `elem` [1 .. 31]
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{What are formlets?}
+    \begin{lstlisting}
+    dateForm' :: Form Date
+    dateForm' = Date
+        <$> inputIntegerF (Just 1)
+        <*> inputIntegerF (Just 16)
+    \end{lstlisting}
+    \begin{lstlisting}
+    dateForm :: Form Date
+    dateForm = dateForm' `check`
+        ensure validDate
+        "This is not a valid date"
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{What are formlets?}
+    Composability?
+    \vspaced
+    \begin{lstlisting}
+    dateForm :: Form Date
+
+    inputIntegerF (Just 1)
+        :: Form Integer
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{What are formlets?}
+    \begin{lstlisting}
+    data User = User
+        { name      :: String
+        , password  :: String
+        , birthdate :: Date
+        } deriving (Show)
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{What are formlets?}
+    \begin{lstlisting}
+    userForm :: Form User
+    userForm = User
+        <$> inputF Nothing
+        <*> passwordF Nothing
+        <*> dateForm
+    \end{lstlisting}
+\end{frame}
+
+\end{document}
