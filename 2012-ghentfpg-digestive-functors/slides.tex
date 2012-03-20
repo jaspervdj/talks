@@ -56,6 +56,7 @@
 
 \begin{frame}{Overview}
     \textbf{What are formlets?} \\
+    digestive-functors \\
 \end{frame}
 
 \begin{frame}{What are formlets?}
@@ -63,7 +64,9 @@
     \vspaced
     \emph{The essence of form abstraction} \\
     \vspaced
-    Ezra Cooper, Sam Lindley, Philip Wadler, and Jeremy Yallop.
+    Ezra Cooper, Sam Lindley, Philip Wadler, and Jeremy Yallop. \\
+    \vspaced
+    Haskell library by Chris Eidhof
 \end{frame}
 
 \begin{frame}{What are formlets?}
@@ -133,6 +136,61 @@
         <*> passwordF Nothing
         <*> dateForm
     \end{lstlisting}
+\end{frame}
+
+% digestive-functors
+% ------------------
+
+\begin{frame}{Overview}
+    What are formlets? \\
+    \textbf{digestive-functors} \\
+\end{frame}
+
+\begin{frame}{digestive-functors}
+    Released in 2010 \\
+    \vspaced
+    A number of practical improvements in comparison to formlets \\
+    \vspaced
+    Similar API, completely different internals
+\end{frame}
+
+\begin{frame}[fragile]{digestive-functors}
+    Allow user to click label instead of (small) checkbox \\
+    \begin{lstlisting}[language=html]
+    <label for="checkbox">
+        Label:
+    </label>
+    <input type="checkbox"
+        id ="checkbox" />
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{digestive-functors}
+    Error type in formlets:
+    \begin{lstlisting}
+    [String]
+    \end{lstlisting}
+    \vspaced
+    Error type in digestive-functors:
+    \begin{lstlisting}
+    [ErrorDescription] -> Html
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{digestive-functors}
+    In formlets:
+    \vspaced
+    \begin{center}
+    \includegraphics[width=0.7\textwidth]{images/errors-formlets.png}
+    \end{center}
+\end{frame}
+
+\begin{frame}[fragile]{digestive-functors}
+    In digestive-functors:
+    \vspaced
+    \begin{center}
+    \includegraphics[width=\textwidth]{images/errors-digestive-functors.png}
+    \end{center}
 \end{frame}
 
 \end{document}
