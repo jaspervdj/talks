@@ -57,6 +57,7 @@
 \begin{frame}{Overview}
     \textbf{What are formlets?} \\
     digestive-functors \\
+    digestive-functors 0.3 \\
 \end{frame}
 
 \begin{frame}{What are formlets?}
@@ -108,7 +109,7 @@
 \end{frame}
 
 \begin{frame}[fragile]{What are formlets?}
-    Composability?
+    \textbf{Composability?} \\
     \vspaced
     \begin{lstlisting}
     dateForm :: Form Date
@@ -144,6 +145,7 @@
 \begin{frame}{Overview}
     What are formlets? \\
     \textbf{digestive-functors} \\
+    digestive-functors 0.3 \\
 \end{frame}
 
 \begin{frame}{digestive-functors}
@@ -177,7 +179,7 @@
     \end{lstlisting}
 \end{frame}
 
-\begin{frame}[fragile]{digestive-functors}
+\begin{frame}{digestive-functors}
     In formlets:
     \vspaced
     \begin{center}
@@ -185,11 +187,159 @@
     \end{center}
 \end{frame}
 
-\begin{frame}[fragile]{digestive-functors}
+\begin{frame}{digestive-functors}
     In digestive-functors:
     \vspaced
     \begin{center}
     \includegraphics[width=\textwidth]{images/errors-digestive-functors.png}
+    \end{center}
+\end{frame}
+
+\begin{frame}{digestive-functors}
+    \textbf{Problems:} \\
+    \vspaced
+    Sometimes hard to use \\
+    Suffered from TMTVA* Syndrome \\
+    Complicated implementation \\
+    \vspaced
+    \emph{*Too Many Type Variables, Aaargh!}
+\end{frame}
+
+% digestive-functors 0.3
+% ----------------------
+
+\begin{frame}{Overview}
+    What are formlets? \\
+    digestive-functors \\
+    \textbf{digestive-functors 0.3} \\
+\end{frame}
+
+\begin{frame}{digestive-functors 0.3}
+    What I've been working on for some weeks \\
+    \vspaced
+    Attempts to overcome the main drawback of formlets
+\end{frame}
+
+\begin{frame}[fragile]{digestive-functors 0.3}
+    \begin{lstlisting}
+    foo :: Form User
+    \end{lstlisting}
+    \vspaced
+    Specifies the \emph{validation rules} as well as the \emph{HTML layout}
+\end{frame}
+
+\begin{frame}{digestive-functors 0.3}
+    \textbf{Separation of concerns}
+    \vspaced
+    \begin{itemize}
+    \item Create multiple representations for a single form
+    \item Cleaner validation rules code
+    \item Use different HTML templating engines
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{digestive-functors 0.3}
+    \textbf{Disadvantage: some loss of type-safety} \\
+    \vspaced
+    Probably impossible to have a type-safe coupling of view and validation
+    rules without losing flexibility or ease-of-use \\
+    \vspaced
+    Explanation does not fit on this slide \\
+\end{frame}
+
+\begin{frame}[fragile]{digestive-functors 0.3}
+    \begin{lstlisting}
+    dateForm' :: Form Date
+    dateForm' = Date
+        <$> "month" .: stringRead'
+        <*> "day"   .: stringRead'
+      where
+        stringRead' = stringRead
+            "Can't parse"
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{digestive-functors 0.3}
+    \begin{lstlisting}
+    dateForm :: Form Date
+    dateForm = check
+        "This is not a valid date"
+        validDate
+        dateForm
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{digestive-functors 0.3}
+    \begin{lstlisting}
+    dateView view = do
+        errorList "month" view
+        label "month" view "Name: "
+        inputText "month" view
+        H.br
+
+        errorList "day" view
+        label "day" view "Email: "
+        inputText "day" view
+        H.br
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{digestive-functors 0.3}
+    \textbf{Composability} \\
+    \vspaced
+    \begin{lstlisting}
+    userForm :: Form User
+    userForm = User
+        <$> "name"      .: string'
+        -- Password is just a string!
+        <*> "password"  .: string'
+        <*> "birthdate" .: dateForm
+      where
+        string' = string Nothing
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{digestive-functors 0.3}
+    \begin{lstlisting}
+    userView :: View Html -> Html
+    userView view = do
+        label "name" view "Name: "
+        inputText "name" view
+        H.br
+
+        label "name" view "Name: "
+        inputPassword "name" view
+        H.br
+        ...
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{digestive-functors 0.3}
+    \begin{lstlisting}
+    userView :: View Html -> Html
+    userView view = do
+        ...
+        label "birthdate.month"
+            view "Month: "
+        inputText "birthdate.month"
+            view
+        H.br
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{digestive-functors 0.3}
+    \begin{lstlisting}
+    userView :: View Html -> Html
+    userView view = do
+        ...
+        dateView $
+            subView "birthdate" view
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[plain]
+    \begin{center}
+    \huge{Demo}
     \end{center}
 \end{frame}
 
