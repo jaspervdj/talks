@@ -1,0 +1,60 @@
+% slides.tex
+\documentclass[20pt]{beamer}
+\usepackage{listings}
+\usepackage[utf8]{inputenc}
+\usepackage{color}
+\usepackage{graphicx}
+
+\usetheme{default}
+\usecolortheme{dove}
+\useoutertheme{default}
+
+% Slightly smaller title
+\setbeamerfont{frametitle}{size=\large}
+\setbeamerfont{verb}{size=\small}
+
+% lst settings
+\lstset{
+    language=Haskell,
+    basicstyle=\small,
+    gobble=4
+}
+
+\newcommand{\vspaced}{
+    \vspace{5mm}
+}
+
+\begin{document}
+
+\title{The Haskell WebSockets library}
+\subtitle{Dutch HUG Day}
+\author{Jasper Van der Jeugt}
+\date{April 20, 2012}
+
+\begin{frame}[plain]
+    \titlepage
+\end{frame}
+
+% Introduction
+% ------------
+
+\begin{frame}{Hello!}
+    My name is Jasper \\
+    Student at UGent \\
+    I write Haskell \\
+    GhentFPG \\
+    \texttt{@jaspervdj} \\
+    \texttt{jaspervdj.be}
+    \begin{picture}(0.0, 0.0)
+    \put(40.0, -15.0){
+        \includegraphics[width=0.5\textwidth]{../2011-functionalpx-blaze-html/images/hat.pdf}}
+    \end{picture}
+\end{frame}
+
+\begin{frame}{Overview}
+    About WebSockets \\
+    Example: a webchat \\
+    Protocol versions: typeclass fun \\
+\end{frame}
+
+\end{document}
