@@ -60,6 +60,55 @@
 % About WebSockets
 % ----------------
 
+\begin{frame}{WebSockets}
+    \textbf{WebSocket} is a web technology providing bi-directional, full-duplex
+    communication channels, usually between a browser and an HTTP server.
+\end{frame}
+
+\begin{frame}[fragile]{WebSockets}
+    Starts as an HTTP request, usually over port 80
+    \vspaced
+    \begin{lstlisting}
+    GET /chat HTTP/1.1
+    Host: server.example.com
+    Upgrade: websocket
+    Connection: Upgrade
+    ...
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{WebSockets}
+    Server upgrades the connection
+    \vspaced
+    \begin{lstlisting}
+    HTTP/1.1 101 Switching Protocols
+    Upgrade: websocket
+    Connection: Upgrade
+    ...
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{WebSockets}
+    Possible uses: \\
+    \vspaced
+    Chat services \\
+    Multiplayer games \\
+    Real-time notifications \\
+    ...
+\end{frame}
+
+\begin{frame}[fragile]{WebSockets}
+    \begin{lstlisting}
+    var ws = new WebSocket(uri);
+    ws.onmessage = function(event) {
+        alert(event.data);
+    };
+    ws.onmessage = function() {
+        ws.send('Hello, server.');
+    };
+    \end{lstlisting}
+\end{frame}
+
 \begin{frame}{About WebSockets}
     Supported browsers:
     \begin{center}
@@ -67,5 +116,15 @@
     \end{center}
     IE10 will also support the protocol
 \end{frame}
+
+% Example: a webchat
+% ------------------
+
+% TODO
+
+% Protocol versions: typeclass fun
+% --------------------------------
+
+% TODO
 
 \end{document}
