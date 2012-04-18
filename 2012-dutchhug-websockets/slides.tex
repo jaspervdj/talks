@@ -117,6 +117,12 @@
     IE10 will also support the protocol
 \end{frame}
 
+\begin{frame}{About WebSockets}
+    Important detail: \\
+    \vspaced
+    Protocol allows for version negotiation between client and server
+\end{frame}
+
 % Protocol versions: typeclass fun
 % --------------------------------
 
@@ -145,6 +151,114 @@
     \begin{center}
     \includegraphics[width=\textwidth]{images/implementation.png}
     \end{center}
+\end{frame}
+
+\begin{frame}{Protocol versions: typeclass fun}
+    Code on the following slides is simplified for conciceness and clarity...
+\end{frame}
+
+\begin{frame}[fragile]{Protocol versions: typeclass fun}
+    \begin{lstlisting}
+    sendTextData
+      :: TextProtocol p
+      => Text
+      -> WebSockets p ()
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Protocol versions: typeclass fun}
+    \begin{lstlisting}
+    sendBinaryData
+      :: BinaryProtocol p
+      => ByteString
+      -> WebSockets p ()
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Protocol versions: typeclass fun}
+    \begin{lstlisting}
+    -- Compatible with hybi-00
+    -- and hybi-10
+    app :: TextProtocol p,
+        => WebSockets p ()
+
+    main :: IO ()
+    main = serve
+      (app :: WebSockets Hybi00 ())
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Protocol versions: typeclass fun}
+    \begin{lstlisting}
+    class Protocol p =>
+      TextProtocol p
+    class Protocol p =>
+      BinaryProtocol p
+
+    instance TextProtocol Hybi00
+
+    instance TextProtocol   Hybi10
+    instance BinaryProtocol Hybi10
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Protocol versions: typeclass fun}
+    \begin{lstlisting}
+    class Protocol p where
+      version :: p -> String
+      ...
+
+      implementations :: [p]
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Protocol versions: typeclass fun}
+    \begin{lstlisting}
+    {-# LANGUAGE
+      ExistentialQuantification #-}
+
+    data Hybi00 = forall p.
+      Protocol p => Hybi00 p
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Protocol versions: typeclass fun}
+    \begin{lstlisting}
+    instance Protocol Hybi00 where
+      version (Hybi00 p) = version p
+      ...
+
+      implementations =
+        [ Hybi00 Hybi00_
+        , Hybi00 Hybi10_
+        ]
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Protocol versions: typeclass fun}
+    \begin{lstlisting}
+    instance Protocol Hybi10 where
+      version (Hybi10 p) = version p
+      ...
+
+      implementations =
+        [ Hybi10 Hybi10_
+        ]
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Protocol versions: typeclass fun}
+    \begin{lstlisting}
+    data Hybi00_ = Hybi00_
+    instance Protocol Hybi00_ where
+      -- Actual implementation ...
+      implementations = undefined
+
+    data Hybi10_ = Hybi10_
+    instance Protocol Hybi10_ where
+      -- Actual implementation ...
+      implementations = undefined
+    \end{lstlisting}
 \end{frame}
 
 % Example: a webchat
