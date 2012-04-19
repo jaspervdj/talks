@@ -184,6 +184,7 @@
 
     main :: IO ()
     main = serve
+      -- Use hybi-00 or above
       (app :: WebSockets Hybi00 ())
     \end{lstlisting}
 \end{frame}
@@ -217,6 +218,7 @@
     {-# LANGUAGE
       ExistentialQuantification #-}
 
+    -- hybi-00 or above...
     data Hybi00 = forall p.
       Protocol p => Hybi00 p
     \end{lstlisting}
@@ -237,18 +239,6 @@
 
 \begin{frame}[fragile]{Protocol versions: typeclass fun}
     \begin{lstlisting}
-    instance Protocol Hybi10 where
-      version (Hybi10 p) = version p
-      ...
-
-      implementations =
-        [ Hybi10 Hybi10_
-        ]
-    \end{lstlisting}
-\end{frame}
-
-\begin{frame}[fragile]{Protocol versions: typeclass fun}
-    \begin{lstlisting}
     data Hybi00_ = Hybi00_
     instance Protocol Hybi00_ where
       -- Actual implementation ...
@@ -258,6 +248,18 @@
     instance Protocol Hybi10_ where
       -- Actual implementation ...
       implementations = undefined
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Protocol versions: typeclass fun}
+    \begin{lstlisting}
+    instance Protocol Hybi10 where
+      version (Hybi10 p) = version p
+      ...
+
+      implementations =
+        [ Hybi10 Hybi10_
+        ]
     \end{lstlisting}
 \end{frame}
 
