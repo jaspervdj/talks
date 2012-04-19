@@ -179,7 +179,7 @@
     \begin{lstlisting}
     -- Compatible with hybi-00
     -- and hybi-10
-    app :: TextProtocol p,
+    app :: TextProtocol p
         => WebSockets p ()
 
     main :: IO ()
@@ -197,8 +197,8 @@
       BinaryProtocol p
 
     instance TextProtocol Hybi00
+    instance TextProtocol Hybi10
 
-    instance TextProtocol   Hybi10
     instance BinaryProtocol Hybi10
     \end{lstlisting}
 \end{frame}
