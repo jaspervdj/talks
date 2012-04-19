@@ -100,11 +100,13 @@
 \begin{frame}[fragile]{WebSockets}
     \begin{lstlisting}
     var ws = new WebSocket(uri);
+
     ws.onmessage = function(event) {
-        alert(event.data);
+      alert(event.data);
     };
+
     ws.onmessage = function() {
-        ws.send('Hello, server.');
+      ws.send('Hello, server.');
     };
     \end{lstlisting}
 \end{frame}
@@ -289,6 +291,7 @@
 
 \begin{frame}[plain]
     \begin{center}
+    \small{Thanks for listening!} \\
     \huge{Questions?}
     \end{center}
 \end{frame}
