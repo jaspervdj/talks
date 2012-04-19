@@ -206,7 +206,8 @@
 \begin{frame}[fragile]{Protocol versions: typeclass fun}
     \begin{lstlisting}
     class Protocol p where
-      version :: p -> String
+      version   :: p -> String
+      handshake :: Iteratee ...
       ...
 
       implementations :: [p]
@@ -227,9 +228,11 @@
 \begin{frame}[fragile]{Protocol versions: typeclass fun}
     \begin{lstlisting}
     instance Protocol Hybi00 where
-      version (Hybi00 p) = version p
+      version   (Hybi00 p) =
+        version p
+      handshake (Hybi00 p) =
+        handshake p
       ...
-
       implementations =
         [ Hybi00 Hybi00_
         , Hybi00 Hybi10_
@@ -254,9 +257,11 @@
 \begin{frame}[fragile]{Protocol versions: typeclass fun}
     \begin{lstlisting}
     instance Protocol Hybi10 where
-      version (Hybi10 p) = version p
+      version   (Hybi10 p) =
+        version p
+      handshake (Hybi10 p) =
+        handshake p
       ...
-
       implementations =
         [ Hybi10 Hybi10_
         ]
@@ -266,10 +271,27 @@
 % Example: a webchat
 % ------------------
 
-% TODO
+\begin{frame}{Overview}
+    About WebSockets \\
+    Protocol versions: typeclass fun \\
+    \textbf{Example: a webchat} \\
+\end{frame}
+
+\begin{frame}[fragile]{Example: a webchat}
+    Implementing a simple webchat \\
+    \vspaced
+    Live demo: \\
+    \small{\verb#jaspervdj.be/websockets-example#}
+\end{frame}
 
 % The end
 % -------
+
+\begin{frame}[plain]
+    \begin{center}
+    \huge{Questions?}
+    \end{center}
+\end{frame}
 
 % TODO: Help me out with digestive-functors, blaze-html!
 
