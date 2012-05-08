@@ -30,3 +30,4 @@ main = defaultMain
     ]
   where
     input = B.concat $ replicate 2000000 "Hello, world!\n"
+    {-# NOINLINE input #-}
