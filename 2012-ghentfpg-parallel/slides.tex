@@ -60,4 +60,50 @@
     Examples
 \end{frame}
 
+\begin{frame}{The Haskell heap \& `seq`}
+    Present analogy stolen from \\
+    Edward Z. Yang
+    \begin{center}
+    \includegraphics[width=0.4\textwidth]{images/present.pdf}
+    \end{center}
+\end{frame}
+
+\begin{frame}[fragile]{The Haskell heap \& `seq`}
+    \begin{lstlisting}
+    f x = x * 2
+    g x = x + 1
+    \end{lstlisting}
+    \vspaced
+    \mbox{}
+    g (f 3) = \put(0.0, -30.0){
+        \includegraphics[width=0.4\textwidth]{images/g-f-3.pdf}}
+\end{frame}
+
+\begin{frame}[fragile]{The Haskell heap \& `seq`}
+    \begin{lstlisting}
+    g (f 3) `seq` foo
+    \end{lstlisting}
+    \vspaced
+    g (f 3) = \put(0.0, -30.0){
+        \includegraphics[width=0.4\textwidth]{images/g-f-3.pdf}}
+\end{frame}
+
+\begin{frame}[fragile]{The Haskell heap \& `seq`}
+    \begin{lstlisting}
+    (f 3) + 1 `seq` foo
+    \end{lstlisting}
+    \begin{center}
+    \includegraphics[width=0.8\textwidth]{images/g-f-3-eval-1.pdf}
+    \end{center}
+\end{frame}
+
+\begin{frame}[fragile]{The Haskell heap \& `seq`}
+    \begin{lstlisting}
+    (3 * 2) + 1 `seq` foo
+    \end{lstlisting}
+    \begin{center}
+    \includegraphics[width=0.8\textwidth]{images/g-f-3-eval-2.pdf}
+    \end{center}
+\end{frame}
+
 \end{document}
