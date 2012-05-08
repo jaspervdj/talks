@@ -1,6 +1,5 @@
 import Control.DeepSeq (NFData)
-import Control.Parallel (par, pseq)
-import Control.Parallel.Strategies (rdeepseq, withStrategy)
+import Control.Parallel.Strategies (parMap, rdeepseq)
 import System.Random (mkStdGen, randoms)
 
 import Criterion (bench, nf)
@@ -37,11 +36,7 @@ sortPar _     [x] = [x]
 sortPar elems ls  =
     let rec      = if elems <= 4000 then sort else sortPar $ elems `div` 2
         (xs, ys) = split ls
-        xs'      = rec xs
-        ys'      = rec ys
-    in withStrategy rdeepseq xs' `par`
-        withStrategy rdeepseq ys' `pseq`
-        merge xs' ys'
+    in concat $ parMap rdeepseq rec [xs, ys]
 
 main :: IO ()
 main = defaultMain
