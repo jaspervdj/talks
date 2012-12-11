@@ -13,11 +13,15 @@
 \setbeamerfont{frametitle}{size=\large}
 \setbeamerfont{verb}{size=\small}
 
+% Font
+\renewcommand{\ttdefault}{pcr}
+
 % lst settings
 \lstset{
-    language=Haskell,
-    basicstyle=\small,
-    gobble=4
+    basicstyle=\ttfamily\small,
+    gobble=4,
+    keywordstyle=\ttfamily\bfseries,
+    language=Haskell
 }
 
 \newcommand{\vspaced}{
@@ -53,14 +57,65 @@
     \end{picture}
 \end{frame}
 
-% The Haskell heap & `seq`
-% ------------------------
+% About Tsuru Capital
+% -------------------
 
 \begin{frame}{Overview}
     \textbf{About Tsuru Capital} \\
-    Why Haskell? \\
-    Example: parsers \\
-    Example: FRP \\
+    % TODO
+\end{frame}
+
+\begin{frame}{About Tsuru Capital}
+    Privately held \\
+    Finance \\
+    Small team \\
+    In-house software \\
+\end{frame}
+
+% Why Haskell
+% -----------
+
+\begin{frame}{Overview}
+    % TODO
+\end{frame}
+
+\begin{frame}{Why Haskell?}
+    \large{Why not Haskell?}
+\end{frame}
+
+\begin{frame}
+    ``I don't know how we would possibly get anything done
+    \emph{without} Haskell'' --- Alex
+\end{frame}
+
+\begin{frame}{Why Haskell?}
+    First commit in 2008 \\
+    Trader \& tools: $\pm$72k lines of Haskell \\
+    Still some Bash scripts, some Ruby \\
+    \vspaced
+    (Not counting external libraries) \\
+\end{frame}
+
+\begin{frame}[fragile]{Why Haskell?}
+    \textbf{Types} \\
+    \vspaced
+    \begin{lstlisting}
+    newtype Price = P Int
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Why Haskell}
+    \textbf{Types} \\
+    \vspaced
+    AveragePrice, FairPrice, KeyPrice, LikelyPrice, Price, StrikePrice,
+    SynPrice...
+\end{frame}
+
+\begin{frame}[fragile]{Why Haskell}
+    \textbf{Types} \\
+    \vspaced
+    Change the type of one function, \\
+    break the entire build (yay!) \\
 \end{frame}
 
 \end{document}
