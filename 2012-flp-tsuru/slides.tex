@@ -188,7 +188,7 @@
     \vspaced
     \texttt{aeson}, \texttt{lens}, \texttt{elerea}, \texttt{text},
     \texttt{binary}, \texttt{async}, \texttt{statistics},
-    \texttt{diagrams}...  \\
+    \texttt{diagrams}, \texttt{criterion}...  \\
     \vspaced
     \small{(Some bad ones as well)}
 \end{frame}
@@ -272,13 +272,23 @@
 \end{frame}
 
 \begin{frame}[fragile]{Example: parsers}
+    \begin{lstlisting}
+    issuer :: Parser Issuer
+    issuer = do
+        tag <- string 3
+        case tag of
+            ...
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Example: parsers}
     In a separate file...
     \vspaced
     \begin{lstlisting}
     Packet
      Offer
       _Header   ByteString 3 "OFF"
-      Issuer    Issuer     6 issuer
+      Issuer    Issuer     8 issuer
       5x Amount Volume     6
       5x Price  Price      6
     \end{lstlisting}
