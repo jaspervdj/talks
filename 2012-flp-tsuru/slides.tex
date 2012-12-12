@@ -269,6 +269,59 @@
     \end{lstlisting}
 \end{frame}
 
+\begin{frame}[fragile]{Example: FRP}
+    Conceptually: \\
+    \vspaced
+    \begin{lstlisting}
+    newtype Time = T Int
+    data Signal a =
+        Signal (Time -> a)
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Example: FRP}
+    \begin{lstlisting}
+    portfolio
+        :: Signal [Instrument]
+
+    mousePosition
+        :: Signal (Int, Int)
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Example: FRP}
+    \begin{lstlisting}
+    data Signal a
+
+    instance Functor Signal
+    instance Monad Signal
+    instance Applicative Signal
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Example: FRP}
+    \begin{lstlisting}
+    dollars :: Signal Int
+    dollars = do
+      instrs <- portfolio
+      return $ sum $
+        map instrumentValue instrs
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Example: FRP}
+    \begin{lstlisting}
+    uixLabel
+      :: Show a
+      => Signal a
+      -> UIx Label
+
+    uixGraph
+      :: Signal [(Double, Double)]
+      -> UIx Widget
+    \end{lstlisting}
+\end{frame}
+
 % Questions?
 % ----------
 
