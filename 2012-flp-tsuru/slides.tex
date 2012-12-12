@@ -4,6 +4,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{color}
 \usepackage{graphicx}
+\usepackage{pdfpages}
 
 \usetheme{default}
 \usecolortheme{dove}
@@ -242,13 +243,37 @@
 \end{frame}
 
 \begin{frame}{Example: FRP}
+    Monitor the trading software using \emph{viewer} tools \\
+    \vspaced
+    Complicated GUIs
+\end{frame}
+
+\begin{frame}{Example: FRP}
+    \includegraphics[width=\textwidth]{images/viewer-screenshot.png}
+\end{frame}
+
+\begin{frame}{Example: FRP}
+    Traditional frameworks: usually MVC: \texttt{Model},
+    \texttt{ChangeListener}...
+\end{frame}
+
+\begin{frame}{Example: FRP}
     \textbf{Functional Reactive Programming} \\
     \vspaced
     We use the Elerea library and some own additions to it
 \end{frame}
 
-\begin{frame}{Example: FRP}
-    \includegraphics[width=\textwidth]{images/viewer-screenshot.png}
+\begin{frame}[fragile]{Example: FRP}
+    \begin{lstlisting}
+    data Signal a
+    \end{lstlisting}
+\end{frame}
+
+% Questions?
+% ----------
+
+\begin{frame}[plain]
+    \includegraphics[width=\textwidth]{images/questions.jpg}
 \end{frame}
 
 \end{document}
