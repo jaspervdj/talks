@@ -130,8 +130,12 @@
 \end{frame}
 
 \begin{frame}{Example: parsers}
-    \textbf{Parsers in Haskell}
-    % TODO
+    \textbf{Parsers in Haskell} \\
+    \vspaced
+    Happy \\
+    Parsec \\
+    Attoparsec \\
+    ... \\
 \end{frame}
 
 \begin{frame}[fragile]{Example: parsers}
@@ -144,6 +148,72 @@
     2 *  6 byte issue code
     5 * 12 byte best prices
     ...
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Example: parsers}
+    Typically ASCII-only packets
+    \vspaced
+    \begin{lstlisting}
+    KSEBID_0123011101100105...
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Example: parsers}
+    Using e.g. Parsec \\
+    \vspaced
+    \begin{lstlisting}
+    packet :: Parser Packet
+    packet = do
+        messageNo <- decimal 11
+        transCode <- string 11
+        opGroup   <- marketOpgroup
+        ...
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Example: parsers}
+    New library: \textbf{Parsergen} \\
+    \vspaced
+    On github: \\
+    \texttt{tsurucapital/parsergen}
+\end{frame}
+
+\begin{frame}[fragile]{Example: parsers}
+    In Haskell... \\
+    \vspaced
+    \begin{lstlisting}
+    newtype Volume = V Int
+    newtype Price = P Int
+
+    data Issuer = ...
+
+    issuer :: Parser Issuer
+    issuer = ...
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Example: parsers}
+    In a separate file...
+    \vspaced
+    \begin{lstlisting}
+    Packet
+     Offer
+      _Header   ByteString 3 "OFF"
+      Issuer    Issuer     6 issuer
+      5x Amount Volume     6
+      5x Price  Price      6
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Example: parsers}
+    In Haskell again... \\
+    \vspaced
+    \begin{lstlisting}
+    $(genDataTypeFromFile
+        "Packet.ths")
+    $(genParserFromFile
+        "Packet.ths")
     \end{lstlisting}
 \end{frame}
 
