@@ -2,6 +2,7 @@
 \documentclass[20pt]{beamer}
 \usepackage{listings}
 \usepackage[utf8]{inputenc}
+\usepackage{cancel}
 \usepackage{color}
 \usepackage{graphicx}
 \usepackage{pdfpages}
@@ -67,21 +68,21 @@
 \end{frame}
 
 \begin{frame}{About Tsuru Capital}
-    1. Small team \\
-\end{frame}
-
-\begin{frame}[plain]
-    \includegraphics[width=\textwidth]{images/group-picture.jpg}
-\end{frame}
-
-\begin{frame}{About Tsuru Capital}
-    2. Haskell
+    1. Haskell
 \end{frame}
 
 \begin{frame}[plain]
     \begin{center}
     \includegraphics[width=0.6\textwidth]{images/haskell.pdf}
     \end{center}
+\end{frame}
+
+\begin{frame}{About Tsuru Capital}
+    2. Small team \\
+\end{frame}
+
+\begin{frame}[plain]
+    \includegraphics[width=\textwidth]{images/group-picture.jpg}
 \end{frame}
 
 \begin{frame}{About Tsuru Capital}
@@ -140,18 +141,35 @@
     \end{lstlisting}
 \end{frame}
 
-\begin{frame}[fragile]{Why Haskell}
+\begin{frame}[fragile]{Why Haskell?}
     \textbf{Types} \\
     \vspaced
     AveragePrice, FairPrice, KeyPrice, LikelyPrice, Price, StrikePrice,
     SynPrice...
 \end{frame}
 
-\begin{frame}[fragile]{Why Haskell}
+\begin{frame}[fragile]{Why Haskell?}
     \textbf{Types} \\
     \vspaced
     Change the type of one function, \\
     break the entire build (yay!) \\
+\end{frame}
+
+\begin{frame}{Why Haskell?}
+    Haskell is fast
+\end{frame}
+
+\begin{frame}{Why Haskell?}
+    Haskell \cancel{is} fast \\
+    Haskell can be fast
+\end{frame}
+
+\begin{frame}{Why Haskell?}
+    \textbf{Haskell can be fast} \\
+    \vspaced
+    Performance is \emph{always} measured (even in production) \\
+    \vspaced
+    Daily reports of loop times
 \end{frame}
 
 % Example: parsers
@@ -251,6 +269,21 @@
     $(genParserFromFile
         "Packet.ths")
     \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Example: parsers}
+    \begin{lstlisting}
+    parsePacket :: Parser Packet
+    \end{lstlisting}
+    \vspaced
+    Highly optimized!
+\end{frame}
+
+\begin{frame}{Example: parsers}
+    % TODO performance graph, atoi
+    \begin{center}
+    \includegraphics[height=0.8\textheight]{images/atoi.pdf}
+    \end{center}
 \end{frame}
 
 % Example: FRP
