@@ -122,7 +122,9 @@
 \end{frame}
 
 \begin{frame}{Why Haskell?}
-    \large{Why not Haskell?}
+    \large{Why not Haskell?} \\
+    \vspaced
+    \small{Too hard? Too slow? Too annoying?}
 \end{frame}
 
 \begin{frame}
@@ -185,7 +187,10 @@
     Some really good libraries \\
     \vspaced
     \texttt{aeson}, \texttt{lens}, \texttt{elerea}, \texttt{text},
-    \texttt{binary}, \texttt{async}, \texttt{statistics}, \texttt{diagrams}...
+    \texttt{binary}, \texttt{async}, \texttt{statistics},
+    \texttt{diagrams}...  \\
+    \vspaced
+    \small{(Some bad ones as well)}
 \end{frame}
 
 % Example: parsers
@@ -387,7 +392,19 @@
       :: Show a
       => Signal a
       -> UIx Label
+    \end{lstlisting}
+\end{frame}
 
+\begin{frame}[fragile]{Example: FRP}
+    \begin{lstlisting}
+    uixSlider
+      :: (Double, Double)
+      -> UIx (Signal Double)
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Example: FRP}
+    \begin{lstlisting}
     uixGraph
       :: Signal [(Double, Double)]
       -> UIx Widget
