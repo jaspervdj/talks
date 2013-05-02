@@ -1,0 +1,244 @@
+% slides.tex
+\documentclass[20pt]{beamer}
+\usepackage{listings}
+\usepackage[utf8]{inputenc}
+\usepackage{cancel}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{pdfpages}
+
+\usetheme{default}
+\usecolortheme{dove}
+\useoutertheme{default}
+
+% Slightly smaller title
+\setbeamerfont{frametitle}{size=\large}
+\setbeamerfont{verb}{size=\small}
+
+% Font
+\renewcommand{\ttdefault}{pcr}
+
+% lst settings
+\lstset{
+    basicstyle=\ttfamily\small,
+    gobble=4,
+    keywordstyle=\ttfamily\bfseries,
+    language=Haskell
+}
+
+\newcommand{\vspaced}{
+    \vspace{5mm}
+}
+
+\begin{document}
+
+\title{Hakyll}
+\subtitle{OdHac}
+\author{Jasper Van der Jeugt}
+\date{May 3, 2013}
+
+\begin{frame}[plain]
+    \titlepage
+\end{frame}
+
+% Introduction
+% ------------
+
+\begin{frame}{Hello!}
+    My name is Jasper \\
+    Student at UGent \\
+    I write Haskell \\
+    Tsuru Capital \\
+    Erudify \\
+    \texttt{@jaspervdj} \\
+    \texttt{jaspervdj.be}
+    \begin{picture}(0.0, 0.0)
+    \put(0.0, -30.0){
+        \includegraphics[width=0.5\textwidth]
+            {../2012-ghentfpg-parallel/images/skate.pdf}}
+    \end{picture}
+\end{frame}
+
+% Static site generators?
+% -----------------------
+
+\begin{frame}{Static site generators?}
+    \includegraphics[width=\textwidth]{images/cms.pdf}
+\end{frame}
+
+\begin{frame}{Static site generators?}
+    \small{
+    Ace acrylamid Blacksmith Blogofile Bonsai Cactus Chisel coleslaw
+    Composer cyrax Deplot Fairytale Floyd FMPP Frank fugitive gostatic Graze
+    \textbf{Hakyll} Hammer Hastie Hobix Hyde Jekyll jinjet jkl Korma Letterpress
+    Machined Magneto Markbox Markdoc Middleman mynt nanoc Nikola Pagegen
+    Pelican Petrify Phrozn PieCrust Pilcrow Pith poole Punch Quill...
+    }
+\end{frame}
+
+\begin{frame}[fragile]{Static site generators?}
+    \texttt{posts/odhac.markdown}:
+    \vspaced
+    \begin{lstlisting}
+    ---
+    title: OdHac is coming!
+    ---
+
+    I am **so** excited!
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Static site generators?}
+    \texttt{templates/post.html}:
+    \vspaced
+    \begin{lstlisting}[language=HTML]
+    <h1>$title$</h1>
+    <div>$body$</div>
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Static site generators?}
+    \texttt{posts/odhac.html}:
+    \vspaced
+    \begin{lstlisting}[language=HTML]
+    <h1>OdHac is coming!</h1>
+    <div><p>I am
+    <strong>so</strong>
+    excited!</div>
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Static site generators?}
+    \textbf{Advantages:} \\
+    \vspaced
+    Super fast \\
+    No vulnerabilities \\
+    No host support needed \\
+    Version control \\
+    Use your favorite editor \\
+\end{frame}
+
+% Hakyll
+% ------
+
+\begin{frame}{Hakyll}
+    Almost 4 years old now \\
+    Currently version 4 \\
+    Very configurable \\
+    Haskell! \\
+\end{frame}
+
+\begin{frame}[fragile]{Hakyll}
+    XMonad-like configuration: \\
+    \vspaced
+    \begin{lstlisting}
+    match "*.markdown" $ do
+      route   $ setExtension "html"
+      compile $ pandocCompiler
+        >>= relativizeUrls
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Hakyll}
+    \textbf{Flexible} \\
+    \vspaced
+    No fixed file structure \\
+    Use any Haskell library \\
+    Support for shelling out to other utilities \\
+\end{frame}
+
+\begin{frame}[plain]
+    \includegraphics[width=\textwidth]{images/example-demotera.png}
+\end{frame}
+
+\begin{frame}[plain]
+    \includegraphics[width=\textwidth]{images/example-jaspervdj.png}
+\end{frame}
+
+\begin{frame}[plain]
+    \includegraphics[width=\textwidth]{images/example-metaplasm.png}
+\end{frame}
+
+\begin{frame}[plain]
+    \includegraphics[width=\textwidth]{images/example-variadic.png}
+\end{frame}
+
+\begin{frame}[plain]
+    \includegraphics[width=\textwidth]{images/example-web2day.png}
+\end{frame}
+
+% Hakyll internals
+% ----------------
+
+\begin{frame}{Hakyll internals}
+    \includegraphics[width=\textwidth]{images/components.pdf}
+\end{frame}
+
+\begin{frame}{Hakyll internals}
+    \textbf{Core:} \\
+    \vspaced
+    Compiler type \\
+    Routing \\
+    Rule DSL \\
+    Scheduling dependencies \\
+\end{frame}
+
+\begin{frame}{Hakyll internals}
+    \textbf{Web:} \\
+    \vspaced
+    Pandoc \\
+    Templates \\
+    HTML utilities \\
+    RSS/Atom \\
+    Working with URLs \\
+\end{frame}
+
+\begin{frame}{Hakyll internals}
+    \textbf{Init:} \\
+    \vspaced
+    \texttt{hakyll-init my-blog} \\
+    \vspaced
+    Makes it easy to get started \\
+\end{frame}
+
+\begin{frame}{Hakyll internals}
+    \textbf{Preview:} \\
+    \vspaced
+    \texttt{./site preview} \\
+    \vspaced
+    Local server to preview changes \\
+    Automatically recompiles site on change \\
+\end{frame}
+
+\begin{frame}{Hakyll internals}
+    \textbf{Check:} \\
+    \vspaced
+    \texttt{./site check} \\
+    \vspaced
+    Checks internal and external links
+\end{frame}
+
+% OdHac!
+% ------
+
+\begin{frame}{OdHac!}
+    Many possible enhancements, not very hard
+\end{frame}
+
+\begin{frame}{OdHac!}
+    Improve tmp file API \\
+    Fay integration? \\
+    Extend template system \\
+    More granular routing dependencies \\
+    Checks \\
+    ... \\
+\end{frame}
+
+% Questions?
+% ----------
+
+\begin{frame}[plain]
+    \center{\huge{Questions?}}
+\end{frame}
+
+\end{document}
