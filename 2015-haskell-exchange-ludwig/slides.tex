@@ -69,38 +69,18 @@
     \texttt{jaspervdj.be}
 \end{frame}
 
-\begin{frame}{Overview}
-    What is Ludwig? \\
-    Adventures in Scope Checking \\
-    Adventures in Type Checking \\
-    Documentation Generation \\
-\end{frame}
-
-% What is Ludwig?
-% ---------------
-
-\begin{frame}{Overview}
-    \textbf{What is Ludwig?} \\
-    Adventures in Scope Checking \\
-    Adventures in Type Checking \\
-    Documentation Generation \\
-\end{frame}
-
 \imageframe{images/fugue.jpg}
 
-\begin{frame}{What is Ludwig?}
-    \textbf{Fugue} \\
-    \vspaced
-
+\begin{frame}{Fugue}
     Fugue builds, optimizes, and enforces cloud infrastructure -- continuously
     and automatically. Declare your cloud and let Fugue automate the rest.
 \end{frame}
 
-\begin{frame}{What is Ludwig?}
+\begin{frame}[plain]
     \center{How do you ``declare a cloud''?}
 \end{frame}
 
-\begin{frame}[fragile]{What is Ludwig?}
+\begin{frame}[fragile,plain]
     \begin{lstlisting}
     my-app:
       services: [
@@ -111,11 +91,11 @@
     \end{lstlisting}
 \end{frame}
 
-\begin{frame}{What is Ludwig?}
+\begin{frame}[plain]
     \center{Why not YAML?}
 \end{frame}
 
-\begin{frame}[fragile]{What is Ludwig?}
+\begin{frame}[fragile]{Why not YAML?}
     \textbf{Abstraction}
     \vspaced
     \begin{lstlisting}[keywords = {}]
@@ -126,7 +106,7 @@
     \end{lstlisting}
 \end{frame}
 
-\begin{frame}[fragile]{What is Ludwig?}
+\begin{frame}[fragile]{Why not YAML?}
     \textbf{Where do you store defaults?} \\
     \vspaced
     In the parser? \\
@@ -134,14 +114,14 @@
     And also in the documentation? \\
 \end{frame}
 
-\begin{frame}[fragile]{What is Ludwig?}
+\begin{frame}[fragile]{Why not YAML?}
     \textbf{How do you document?} \\
     \vspaced
     Documentation is hard to write \\
     \dots and hard to maintain \\
 \end{frame}
 
-\begin{frame}[fragile]{What is Ludwig?}
+\begin{frame}[fragile]{Why not YAML?}
     \textbf{How do you provide error messages?} \\
     \vspaced
     \begin{lstlisting}[keywords = {}]
@@ -151,18 +131,14 @@
     \end{lstlisting}
 \end{frame}
 
-\begin{frame}{What is Ludwig?}
-    \textbf{So what is Ludwig?} \\
-    \vspaced
+\begin{frame}{So what is Ludwig?}
     YAML-like syntax \\
     Statically typed \\
     Algebraic datatypes \\
     Extensible records \\
 \end{frame}
 
-\begin{frame}{What is Ludwig?}
-    \textbf{So what is Ludwig?} \\
-    \vspaced
+\begin{frame}{So what is Ludwig?}
     Functions \\
     Pattern matching \\
     Modules \\
@@ -171,7 +147,9 @@
 % Here we start to talk about typing
 % ----------------------------------
 
-\begin{frame}[fragile]{What is Ludwig?}
+\imageframe{images/overview-typechecker.pdf}
+
+\begin{frame}[fragile]{Typing}
     \begin{lstlisting}
     vanilla:
       name:  "Vanilla milkshake"
@@ -183,7 +161,7 @@
     \end{lstlisting}
 \end{frame}
 
-\begin{frame}[fragile]{What is Ludwig?}
+\begin{frame}[fragile]{Typing}
     \begin{lstlisting}
     data CoreExpr
       = ...
@@ -197,13 +175,15 @@
     \end{lstlisting}
 \end{frame}
 
-\begin{frame}[fragile]{What is Ludwig?}
+\begin{frame}[fragile]{Typing}
     \begin{lstlisting}
     vanilla:
       name:  "Vanilla milkshake"
       price: 5
     \end{lstlisting}
 \end{frame}
+
+\imageframe{images/overview-desugar.pdf}
 
 \begin{frame}[fragile,plain]
     \begin{lstlisting}
@@ -242,11 +222,13 @@
     \end{lstlisting}
 \end{frame}
 
+\imageframe{images/overview-typechecker.pdf}
+
 \begin{frame}[fragile,plain]
     \[
     \begin{array}{rclcrcl}
-    % TODO: Overline alpha
-    \tau & ::= & \text{C}     & ~~ & \sigma & ::= & \forall \alpha. \tau  \\
+    \tau & ::= & \text{C}     & ~~ & \sigma & ::= & \forall
+                                                    \bar{\alpha}. \tau    \\
          &  |  & \alpha       & ~~ &        &     &                       \\
          &  |  & \tau ~ \tau  & ~~ & \rho   & ::= & \emptyset             \\
          &  |  & \{ \rho \}   & ~~ &        &  |  & \code{k:}\tau | \rho  \\
@@ -377,7 +359,6 @@
 
 \begin{frame}[fragile]{Separate type definitions}
     \textbf{In \texttt{milklib.lw}:}
-    \vspaced
     \begin{lstlisting}[keywords = {}]
     alias milkshake:
       name:  string
@@ -402,6 +383,8 @@
     \end{lstlisting}
 \end{frame}
 
+\imageframe{images/overview-scopechecker.pdf}
+
 \begin{frame}[fragile]{Separate type definitions}
     Implementing a module system:
     \vspaced
@@ -412,7 +395,6 @@
 \end{frame}
 
 \begin{frame}[fragile]{Check overall module sanity}
-    % TODO: Insert picture
     The one base function which does everything!**
 \end{frame}
 
@@ -470,6 +452,10 @@
     \end{lstlisting}
 \end{frame}
 
+\imageframe{images/trie-01.pdf}
+
+\imageframe{images/trie-02.pdf}
+
 \begin{frame}[fragile]{Quantification}
     \begin{lstlisting}[keywords = {}]
     quantify
@@ -489,20 +475,6 @@
       :: Scope
       -> Scope
       -> Either
-            [ScopeError]
-            Scope
-    \end{lstlisting}
-\end{frame}
-
-% TODO: Insert picture, do you have a moment to talk about our lord and saviour
-% applicative?
-
-\begin{frame}[fragile]{Validation}
-    \begin{lstlisting}[keywords = {}]
-    union
-      :: Scope
-      -> Scope
-      -> Validation
             [ScopeError]
             Scope
     \end{lstlisting}
@@ -533,6 +505,17 @@
       Fail e  <*> Ok   _  = Fail e
       Fail e1 <*> Fail e2 =
         Fail (e1 <> e2)
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Validation}
+    \begin{lstlisting}[keywords = {}]
+    union
+      :: Scope
+      -> Scope
+      -> Validation
+            [ScopeError]
+            Scope
     \end{lstlisting}
 \end{frame}
 
@@ -580,8 +563,7 @@
     Bonus: documentation generation
 \end{frame}
 
-% TODO: Picture: try this one weird trick to implement documentation generation
-% Javadoc authors hate him!
+\imageframe{images/overview-docs.pdf}
 
 \begin{frame}[fragile,plain]
     \begin{lstlisting}[keywords = {}]
@@ -590,7 +572,7 @@
       # Name of the yummy drink
       name:  string
       # Price of the yummy drink
-      rince: int
+      price: int
     \end{lstlisting}
 \end{frame}
 
@@ -627,6 +609,20 @@
     \end{lstlisting}
 \end{frame}
 
+\begin{frame}[fragile,plain]
+    \begin{lstlisting}
+    parseAlias = do
+      Token.reserved "alias"
+      comment <- getCommentBlock
+      ...
+
+    data Alias = Alias
+        { aName     :: Name
+        , aMetadata :: Metadata
+        , ...
+        }
+    \end{lstlisting}
+\end{frame}
 
 % Questions?
 % ----------
