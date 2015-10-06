@@ -1,0 +1,638 @@
+% slides.tex
+\documentclass[20pt]{beamer}
+\usepackage{listings}
+\usepackage[utf8]{inputenc}
+\usepackage{cancel}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{pdfpages}
+\usepackage{amsmath}
+
+\usetheme{default}
+\usecolortheme{dove}
+\useoutertheme{default}
+
+% Slightly smaller title
+\setbeamerfont{frametitle}{size=\large}
+\setbeamerfont{verb}{size=\small}
+
+% Font
+\renewcommand{\ttdefault}{pcr}
+
+% lst settings
+\lstset{
+    basicstyle=\ttfamily\small,
+    gobble=4,
+    keywordstyle=\ttfamily\bfseries,
+    language=Haskell,
+    showstringspaces=false
+}
+
+\newcommand{\vspaced}{
+    \vspace{5mm}
+}
+
+\newcommand{\imageframe}[1]{
+    {
+        \usebackgroundtemplate{
+            \includegraphics[height=\paperheight,width=\paperwidth]{#1}}
+        \setbeamertemplate{navigation symbols}{}
+        \begin{frame}[plain]
+        \end{frame}
+    }
+}
+
+\newcommand{\code}[1]{
+    \texttt{\small{#1}}
+}
+
+\begin{document}
+
+\title{The Ludwig DSL}
+\subtitle{Haskell Exchange 2015}
+\author{Jasper Van der Jeugt}
+\date{October 8, 2015}
+
+\begin{frame}[plain]
+    \titlepage
+\end{frame}
+
+% Introduction
+% ------------
+
+\begin{frame}{Hello!}
+    My name is Jasper \\
+    I write Haskell \\
+    Currently for Luminal \\
+    \vspaced
+    \texttt{@jaspervdj} \\
+    \texttt{jaspervdj.be}
+\end{frame}
+
+\begin{frame}{Overview}
+    What is Ludwig? \\
+    Adventures in Scope Checking \\
+    Adventures in Type Checking \\
+    Documentation Generation \\
+\end{frame}
+
+% What is Ludwig?
+% ---------------
+
+\begin{frame}{Overview}
+    \textbf{What is Ludwig?} \\
+    Adventures in Scope Checking \\
+    Adventures in Type Checking \\
+    Documentation Generation \\
+\end{frame}
+
+\imageframe{images/fugue.jpg}
+
+\begin{frame}{What is Ludwig?}
+    \textbf{Fugue} \\
+    \vspaced
+
+    Fugue builds, optimizes, and enforces cloud infrastructure -- continuously
+    and automatically. Declare your cloud and let Fugue automate the rest.
+\end{frame}
+
+\begin{frame}{What is Ludwig?}
+    \center{How do you ``declare a cloud''?}
+\end{frame}
+
+\begin{frame}[fragile]{What is Ludwig?}
+    \begin{lstlisting}
+    my-app:
+      services: [
+        internet,
+        web-frontend,
+        database-backend
+      ]
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{What is Ludwig?}
+    \center{Why not YAML?}
+\end{frame}
+
+\begin{frame}[fragile]{What is Ludwig?}
+    \textbf{Abstraction}
+    \vspaced
+    \begin{lstlisting}[keywords = {}]
+    tasks:
+      - command: echo {{ item }}
+        with_items: [ 0, 2, 4 ]
+        when: item > 2
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{What is Ludwig?}
+    \textbf{Where do you store defaults?} \\
+    \vspaced
+    In the parser? \\
+    In another configuration file? \\
+    And also in the documentation? \\
+\end{frame}
+
+\begin{frame}[fragile]{What is Ludwig?}
+    \textbf{How do you document?} \\
+    \vspaced
+    Documentation is hard to write \\
+    \dots and hard to maintain \\
+\end{frame}
+
+\begin{frame}[fragile]{What is Ludwig?}
+    \textbf{How do you provide error messages?} \\
+    \vspaced
+    \begin{lstlisting}[keywords = {}]
+    $ ./foo bar.yaml
+    wrong type for field 'delay';
+    integer
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{What is Ludwig?}
+    \textbf{So what is Ludwig?} \\
+    \vspaced
+    YAML-like syntax \\
+    Statically typed \\
+    Algebraic datatypes \\
+    Extensible records \\
+\end{frame}
+
+\begin{frame}{What is Ludwig?}
+    \textbf{So what is Ludwig?} \\
+    \vspaced
+    Functions \\
+    Pattern matching \\
+    Modules \\
+\end{frame}
+
+% Here we start to talk about typing
+% ----------------------------------
+
+\begin{frame}[fragile]{What is Ludwig?}
+    \begin{lstlisting}
+    vanilla:
+      name:  "Vanilla milkshake"
+      price: 5
+
+    stawberry: vanilla {
+      name: "Strawberry milkshake"
+    }
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{What is Ludwig?}
+    \begin{lstlisting}
+    data CoreExpr
+      = ...
+      | LitE Literal
+      | ...
+
+    infer (LitE (StringLit _)) =
+      return stringType
+    infer (LitE (IntLit _)) =
+      return intType
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{What is Ludwig?}
+    \begin{lstlisting}
+    vanilla:
+      name:  "Vanilla milkshake"
+      price: 5
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile,plain]
+    \begin{lstlisting}
+    data Expr
+      = ...
+      | StructE [(Key, Expr)]
+      | ...
+
+    data CoreExpr
+      = ...
+      | EmptyE
+      | SetE Key Expr Expr
+      | ...
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile,plain]
+    \begin{lstlisting}
+    desugar expr = case expr of
+      ...
+      StructE ((k, e) : xs)) ->
+        SetE k e (desugar xs)
+      StructE []             ->
+        EmptyE
+      ...
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile,plain]
+    \begin{lstlisting}
+    vanilla:
+      set("name",
+        "Vanilla milkshake",
+      set("price", 5,
+      empty))
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile,plain]
+    \[
+    \begin{array}{rclcrcl}
+    % TODO: Overline alpha
+    \tau & ::= & \text{C}     & ~~ & \sigma & ::= & \forall \alpha. \tau  \\
+         &  |  & \alpha       & ~~ &        &     &                       \\
+         &  |  & \tau ~ \tau  & ~~ & \rho   & ::= & \emptyset             \\
+         &  |  & \{ \rho \}   & ~~ &        &  |  & \code{k:}\tau | \rho  \\
+    \end{array}
+    \]
+\end{frame}
+
+\begin{frame}[fragile,plain]
+    \begin{lstlisting}
+    infer EmptyE =
+      return $ RowT EmptyR
+
+    infer (SetE k e r) =
+      alpha <- freshTyVar
+      t     <- infer e
+      rt    <- infer r
+      unify alpha rt
+      return $ RowT $
+        ExtendR k e alpha
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile,plain]
+    \begin{lstlisting}
+    vanilla:
+      set("name",
+        "Vanilla milkshake",
+      set("price", 5,
+      empty))
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile,plain]
+    \[
+    \code{infer(vanilla)} = \alpha
+    \]
+    \[
+    \begin{array}{rclll}
+    \alpha  & = & \{ \code{name:}  & \code{string} & | ~ \beta  \} \\
+    \beta   & = & \{ \code{price:} & \code{int}    & | ~ \gamma \} \\
+    \gamma  & = & \emptyset                                        \\
+    \end{array}
+    \]
+\end{frame}
+
+\begin{frame}[fragile,plain]
+    \[
+    \code{infer(vanilla)}
+    \]
+    \[
+    \begin{array}{lll}
+    ~ & = & \{ \code{name:} \code{string} ~ | ~
+               \code{price:} \code{int} ~ | ~ \emptyset \} \\
+    ~ & = & \{ \code{name:} \code{string}, ~ \code{price:} \code{int} \} \\
+    \end{array}
+    \]
+\end{frame}
+
+\begin{frame}[fragile,plain]
+    \begin{lstlisting}
+    vanilla:
+      name:  "Vanilla milkshake"
+      price: 5
+
+    stawberry: vanilla {
+      name: "Strawberry milkshake"
+    }
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile,plain]
+    \begin{lstlisting}
+    strawberry:
+      set("name",
+        "Strawberry milkshake",
+      vanilla)
+    \end{lstlisting}
+\end{frame}
+
+
+\begin{frame}[fragile,plain]
+    \[
+    \code{infer(strawberry)} = \alpha
+    \]
+    \[
+    \begin{array}{rcl}
+    \alpha & = & \{ \code{name:} \code{string} ~ | ~ \beta  \} \\
+    \beta  & = & \{ \code{name:} \code{string}, ~ \code{price:} \code{int} \} \\
+    \end{array}
+    \]
+\end{frame}
+
+\begin{frame}[fragile,plain]
+    \[
+    \code{infer(strawberry)}
+    \]
+    \[
+    \begin{array}{llll}
+    ~ & = & \{ & \code{name:} \code{string}, \\
+      &   &    & \code{name:} \code{string}, ~ \code{price:} \code{int} \} \\
+      & = & \{ & \code{name:} \code{string}, ~ \code{price:} \code{int} \} \\
+    \end{array}
+    \]
+\end{frame}
+
+\begin{frame}[fragile]{Use case: partial defaults}
+    \begin{lstlisting}[keywords = {}]
+    default-milkshake:
+      price: 5
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Use case: partial defaults}
+    \begin{lstlisting}[keywords = {}]
+    vanilla: default-milkshake {
+      name: "Vanilla milkshake"
+    }
+
+    chocolate: default-milkshake {
+      name:  "Chocolate milkshake",
+      price: 6
+    }
+    \end{lstlisting}
+\end{frame}
+
+% Here we start to talk about a module system
+% -------------------------------------------
+
+\begin{frame}[fragile]{Separate type definitions}
+    \textbf{In \texttt{milklib.lw}:}
+    \vspaced
+    \begin{lstlisting}[keywords = {}]
+    alias milkshake:
+      name:  string
+      price: int
+
+    default-milkshake:
+      price: 5
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Separate type definitions}
+    \textbf{In \texttt{menu.lw}:}
+    \begin{lstlisting}[keywords = {}]
+    vanilla: default-milkshake {
+      name: "Vanilla milkshake"
+    }
+
+    chocolate: default-milkshake {
+      name:  "Chocolate milkshake",
+      price: 6
+    }
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Separate type definitions}
+    Implementing a module system:
+    \vspaced
+    \begin{enumerate}
+    \item Check overall module sanity
+    \item Resolve names everywhere
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{Check overall module sanity}
+    % TODO: Insert picture
+    The one base function which does everything!**
+\end{frame}
+
+\begin{frame}[fragile]{Check overall module sanity}
+    The one base function which does everything!** \\
+    \vspaced
+    * Does not actually do everything \\
+    * In \texttt{containers}, not \texttt{base} \\
+\end{frame}
+
+\begin{frame}[fragile,plain]
+    \begin{lstlisting}
+    stronglyConnComp
+      :: Ord key
+      => [(node, key, [key])]
+      -> [SCC node]
+
+    data SCC n
+      = AcyclicSCC n
+      | CyclicSCC [n]
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Resolve names everywhere}
+    \begin{lstlisting}
+    type Scope =
+      Trie String NameInfo
+
+    data NameInfo = NameInfo
+      { niModuleName :: String
+      , niNamespace  :: Namespace
+      , ...
+      }
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Resolve names everywhere}
+    \begin{lstlisting}
+    moduleToScope
+      :: Module -> Scope
+    \end{lstlisting}
+    \vspaced
+    \begin{lstlisting}[keywords = {}]
+    [ milkshake: NameInfo
+        "milklib" TypeName TopLevel
+    , default-milkshake: NameInfo
+        "milklib" VarName TopLevel
+    ]
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Quantification}
+    \begin{lstlisting}
+    requires ml: milklib
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Quantification}
+    \begin{lstlisting}[keywords = {}]
+    quantify
+      :: String -> Scope -> Scope
+
+    [ ml.milkshake: NameInfo
+        "milklib" TypeName TopLevel
+    , ml.default-milkshake: NameInfo
+        "milklib" VarName TopLevel
+    ]
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Validation}
+    \begin{lstlisting}[keywords = {}]
+    union
+      :: Scope
+      -> Scope
+      -> Either
+            [ScopeError]
+            Scope
+    \end{lstlisting}
+\end{frame}
+
+% TODO: Insert picture, do you have a moment to talk about our lord and saviour
+% applicative?
+
+\begin{frame}[fragile]{Validation}
+    \begin{lstlisting}[keywords = {}]
+    union
+      :: Scope
+      -> Scope
+      -> Validation
+            [ScopeError]
+            Scope
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Validation}
+    \begin{lstlisting}
+    data Validation e a
+      = Ok   a
+      | Fail e
+
+    instance Functor
+        (Validation e) where
+      fmap f (Ok x)   = Ok (f x)
+      fmap _ (Fail e) = Fail e
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile,plain]
+    \begin{lstlisting}
+    instance Monoid e =>
+        Applicative (Validation e)
+        where
+      pure = Ok
+
+      Ok   f  <*> Ok   x  = Ok (f x)
+      Ok   _  <*> Fail e  = Fail e
+      Fail e  <*> Ok   _  = Fail e
+      Fail e1 <*> Fail e2 =
+        Fail (e1 <> e2)
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile,plain]
+    \begin{lstlisting}
+    data Expr n
+      = VarE n
+      | LamE n (Expr n)
+      | ...
+
+    scopeCheck
+      :: Scope
+      -> Expr Name
+      -> Validation
+           [ScopeError]
+           (Expr FullName)
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile,plain]
+    \begin{lstlisting}
+    scopeCheck s (VarE n) =
+      lookupVar s n
+
+    scopeCheck s (LamE n e) =
+      LamE
+        <$> pure n'
+        <*> scopeCheck s' e
+     where
+      (n', s') = bindLocalName n s
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Scopechecking}
+    \textbf{Disadvantages:} \\
+    Extra phase, extra code \\
+    \vspaced
+    \textbf{Advantages:} \\
+    List of things we don't care about:
+    duplicate names, shadowing warnings,
+    (type) variable not found\dots
+\end{frame}
+
+\begin{frame}[fragile,plain]
+    Bonus: documentation generation
+\end{frame}
+
+% TODO: Picture: try this one weird trick to implement documentation generation
+% Javadoc authors hate him!
+
+\begin{frame}[fragile,plain]
+    \begin{lstlisting}[keywords = {}]
+    # A yummy drink
+    alias milkshake:
+      # Name of the yummy drink
+      name:  string
+      # Price of the yummy drink
+      rince: int
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile,plain]
+    Problem: comments are removed by tokenization \\
+    \vspaced
+    \begin{lstlisting}
+    parseAlias = do
+      Token.reserved "alias"
+      ...
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile,plain]
+    Solution: store comments as we parse them \\
+    \vspaced
+    \begin{lstlisting}
+    whiteSpace
+      :: MonadState CommentBlock s
+      => ParsecT s u m ()
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile,plain]
+    Solution: store comments as we parse them \\
+    \vspaced
+    \begin{lstlisting}
+    whiteSpace = do
+      skipMany space
+      optional $ do
+        comment <- commentBlock
+        putCommentBlock comment
+        whiteSpace
+    \end{lstlisting}
+\end{frame}
+
+
+% Questions?
+% ----------
+
+\begin{frame}[plain]
+    \center{\huge{Questions?}}
+\end{frame}
+
+\end{document}
