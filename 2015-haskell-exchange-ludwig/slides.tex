@@ -155,7 +155,7 @@
       name:  "Vanilla milkshake"
       price: 5
 
-    stawberry: vanilla {
+    strawberry: vanilla {
       name: "Strawberry milkshake"
     }
     \end{lstlisting}
@@ -227,11 +227,13 @@
 \begin{frame}[fragile,plain]
     \[
     \begin{array}{rclcrcl}
-    \tau & ::= & \text{C}     & ~~ & \sigma & ::= & \forall
+    \tau & ::= & \text{C}               & ~~ & \sigma & ::= & \forall
                                                     \bar{\alpha}. \tau    \\
-         &  |  & \alpha       & ~~ &        &     &                       \\
-         &  |  & \tau ~ \tau  & ~~ & \rho   & ::= & \emptyset             \\
-         &  |  & \{ \rho \}   & ~~ &        &  |  & \code{k:}\tau | \rho  \\
+         &  |  & \alpha                 & ~~ &        &     &             \\
+         &  |  & \tau ~ \tau            & ~~ &        &     &             \\
+         &  |  & \tau \rightarrow \tau  & ~~ & \rho   & ::= & \emptyset   \\
+         &  |  & \{ \rho \}             & ~~ &        &  |  & \code{k:}\tau
+                                                                | \rho    \\
     \end{array}
     \]
 \end{frame}
@@ -293,7 +295,7 @@
       name:  "Vanilla milkshake"
       price: 5
 
-    stawberry: vanilla {
+    strawberry: vanilla {
       name: "Strawberry milkshake"
     }
     \end{lstlisting}
@@ -332,6 +334,11 @@
       & = & \{ & \code{name:} \code{string}, ~ \code{price:} \code{int} \} \\
     \end{array}
     \]
+\end{frame}
+
+\begin{frame}{Other approaches}
+    Scoped labels \\
+    Predicates to indicate label absence \\
 \end{frame}
 
 \begin{frame}[fragile]{Use case: partial defaults}
