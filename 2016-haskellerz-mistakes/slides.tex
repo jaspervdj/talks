@@ -1,0 +1,307 @@
+% slides.tex
+\documentclass[20pt]{beamer}
+\usepackage{listings}
+\usepackage[utf8]{inputenc}
+\usepackage{cancel}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{pdfpages}
+\usepackage{amsmath}
+\usepackage{xcolor}
+
+\usetheme{default}
+\usecolortheme{dove}
+\useoutertheme{default}
+
+% Slightly smaller title
+\setbeamerfont{frametitle}{size=\large}
+\setbeamerfont{verb}{size=\small}
+
+% Font
+\renewcommand{\ttdefault}{pcr}
+
+% lst settings
+\lstset{
+    basicstyle=\ttfamily\small,
+    gobble=4,
+    keywordstyle=\ttfamily\bfseries,
+    showstringspaces=false
+}
+
+\newcommand{\vspaced}{
+    \vspace{5mm}
+}
+
+\newcommand{\imageframe}[1]{
+    {
+        \usebackgroundtemplate{
+            \includegraphics[height=\paperheight,width=\paperwidth]{#1}}
+        \setbeamertemplate{navigation symbols}{}
+        \begin{frame}[plain]
+        \end{frame}
+    }
+}
+
+\newcommand{\code}[1]{
+    \texttt{\small{#1}}
+}
+
+\definecolor{asparagus}{rgb}{0.53, 0.66, 0.42}
+\definecolor{bittersweet}{rgb}{1.0, 0.44, 0.37}
+
+\begin{document}
+
+\title{Haskell:\\
+Mistakes I've made}
+\subtitle{HaskellerZ}
+\author{Jasper Van der Jeugt}
+\date{March 31, 2016}
+
+\begin{frame}[plain]
+    \titlepage
+\end{frame}
+
+\begin{frame}{About me}
+    \begin{itemize}
+    \item I really like Haskell
+    \item Contributed to and authored open source projects
+    \item Worked at Better, currently at Luminal
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{What this talk is about}
+    \emph{Beginner} Haskell ``Mistakes'' that can be avoided, signs of Haskell
+    code smell.
+\end{frame}
+
+\begin{frame}{What this talk is not about}
+    Trivial mistakes: syntax or type errors. We only talk about code that is
+    accepted by the compiler.
+\end{frame}
+
+% Pick your battles
+% -----------------
+
+\begin{frame}{Pick your battles}
+    It's often impossible to have perfectly clean code \emph{everywhere} in
+    large projects.
+\end{frame}
+
+\begin{frame}{Pick your battles}
+    \begin{itemize}
+    \item Aesthetically pleasing code?
+    \item Just need to get the job done?
+    \item Sacrifice clean code on the performance altar?
+    \item Document top-level functions?
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Pick your battles}
+    What works for me: focus on \emph{modules} as units.
+\end{frame}
+
+\begin{frame}{Pick your battles: modules}
+    The \emph{exposed interface} of a module should be clean. \\
+    \vspaced
+    \emph{\small{But inside you can \code{unsafePerformIO} all you want.}}
+\end{frame}
+
+\begin{frame}{Pick your battles: modules}
+    The module should have some documentation about what it is for and how one
+    should use it. \\
+    \vspaced
+    \emph{\small{But you don't necessarily need to write Haddock for all
+    functions if it's clear what they do from the name.}}
+\end{frame}
+
+\begin{frame}{Pick your battles: modules}
+    There should be some tests that verify that the module works correctly. \\
+    \vspaced
+    \emph{\small{But you don't need to test all the internals.}}
+\end{frame}
+
+% Mistake: not using `-Wall`
+% --------------------------
+
+\begin{frame}{Mistake: not using \code{-Wall}}
+    \emph{Always} compile using \code{-Wall}. \\
+    Use \code{-Werror} for production/tests.
+\end{frame}
+
+\begin{frame}{Low-risk \code{-Wall}}
+    \small{
+    \texttt{-fwarn-unused-imports},
+    \texttt{-fwarn-dodgy-exports},
+    \texttt{-fwarn-dodgy-imports},
+    \texttt{-fwarn-monomorphism-restriction},
+    \texttt{-fwarn-implicit-prelude},
+    \texttt{-fwarn-missing-local-sigs},
+    \texttt{-fwarn-missing-exported-sigs},
+    \texttt{-fwarn-missing-import-lists},
+    \texttt{-fwarn-identities}
+    }
+\end{frame}
+
+\begin{frame}{Medium-risk \code{-Wall}}
+    \small{
+    \texttt{-fwarn-unused-binds},
+    \texttt{-fwarn-auto-orphans}
+    }
+\end{frame}
+
+\begin{frame}{High-risk \code{-Wall}}
+    \small{
+    \texttt{-fwarn-unused-matches}
+    \texttt{-fwarn-incomplete-patterns}
+    \texttt{-fwarn-incomplete-uni-patterns}
+    \texttt{-fwarn-incomplete-record-updates}
+    }
+\end{frame}
+
+% Mistake: you think you understand exceptions
+% --------------------------------------------
+
+
+\begin{frame}{Mistake: exceptions}
+    Most common mistake: you think you understand how exceptions work in
+    Haskell. \\
+    \vspaced
+    \small{Alternatively: you falsely assume you will always pay attention
+    to how they work.}
+\end{frame}
+
+\begin{frame}[fragile]{Laziness + exceptions = hard}
+    \begin{lstlisting}
+    errOrOk <- try $
+      return [1, 2, error "kaputt"]
+    case errOrOk of
+      Left err -> print err
+      Right x  -> print x
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Laziness + exceptions = hard}
+    \begin{lstlisting}
+    errOrOk <- try $
+      return (throw MyException)
+    case errOrOk of
+      Left err -> print err
+      Right x  -> print x
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Async exceptions: very hard}
+    Does this function close the socket?
+    \begin{lstlisting}
+    foo :: (Socket -> IO a) -> IO a
+    foo f = do
+      s <- openSocket
+      r <- try $ f s
+      closeSocket s
+      ...
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Async exceptions: very hard}
+    How about:
+    \begin{lstlisting}
+    foo :: (Socket -> IO a) -> IO a
+    foo f = mask $ \restore -> do
+      s <- openSocket
+      r <- try $ restore $ f s
+      closeSocket s
+      ...
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Debugging async exceptions}
+    \begin{enumerate}
+    \normalsize{\item Easy, this function shouldn't throw exceptions.}
+    \small{\item The exception comes from another place? Let's use
+        \texttt{mask}?}
+    \footnotesize{\item Maybe we can set \texttt{unsafeUnmask} to allow an
+        interrupt?}
+    \footnotesize{\item ...}
+    \tiny{\item Nothing works and programming is an eternal cycle of pain and
+        darkness.}
+    \tiny{\item Go back to 1}
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Exceptions: avoiding the madness}
+    Keep your code pure where possible.
+\end{frame}
+
+\begin{frame}{Exceptions: avoiding the madness}
+    Try to avoid throwing exceptions from pure code. If you have an exception
+    lurking somewhere deep within a thunk, bad things will usually happen.
+\end{frame}
+
+\begin{frame}{Exceptions: avoiding the madness}
+    Use more predictable monad stacks:
+    \begin{itemize}
+    \item \code{IO (Either e a)}
+    \item \code{Control.Monad.Except}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Exceptions: avoiding the madness}
+    Use existing solutions such as \code{resource-pool}, \code{resourcet}, and
+    existing patterns like \code{bracket}.
+\end{frame}
+
+% Avoiding GHC Extensions
+% -----------------------
+
+\begin{frame}{Mistake: avoiding GHC extensions}
+    Before I wrote Haskell: C/C++ background. Lots of pain trying to get things
+    compiling on MSVC++.
+\end{frame}
+
+\begin{frame}{Mistake: avoiding GHC extensions}
+    \begin{enumerate}
+    \item There is only GHC
+    \item Extensions widely used in ``standard'' packages
+    \item It's Haskell so refactoring is easy
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Mistake: avoiding GHC extensions}
+    Average of around 3 extensions per module. Commonly:
+    \code{OverloadedStrings},
+    \code{TemplateHaskell},
+    \code{DeriveDataTypeable},
+    \code{ScopedTypeVariables},
+    \code{GeneralizedNewtypeDeriving},
+    \code{BangPatterns}
+\end{frame}
+
+\begin{frame}{Mistake: avoiding GHC extensions}
+    Extensions that improve readability are always a good idea! \\
+    \vspaced
+    \code{LambdaCase},
+    \code{ViewPatterns},
+    \code{PatternGuards},
+    \code{MultiWayIf},
+    \code{TupleSections},
+    \code{BinaryLiterals}
+\end{frame}
+
+\begin{frame}{Mistake: avoiding GHC extensions}
+    Extensions that write code for you are even better! \\
+    \vspaced
+    \code{DeriveFunctor}, \\
+    \code{DeriveFoldable},
+    \code{DeriveTraversable},
+    \code{RecordWildCards},
+    \code{DeriveGeneric}
+\end{frame}
+
+\begin{frame}{Mistake: avoiding GHC extensions}
+    Further reading: \\
+    \vspaced
+    \emph{Oliver Charles: \\
+    24 days of GHC extensions}
+\end{frame}
+
+\end{document}
