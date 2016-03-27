@@ -1,0 +1,19 @@
+digraph strings {
+    graph [fontname = "Helvetica", fontsize = 20]
+    node  [fontname = "Helvetica", fontsize = 20, shape = box]
+    edge  [fontname = "Helvetica", fontsize = 20]
+
+    root [label = "Binary or human-readable?"];
+
+    root -> binary [label = "Binary"];
+    binary [label = "Use ByteString"];
+
+    root -> human [label = "Human readable"];
+    human [label = "Are you writing hello world?"];
+
+    human -> hello_world [label = "Yes"];
+    hello_world [label = "Use String"];
+
+    human -> not_hello_world [label = "No"];
+    not_hello_world [label = "Use Text"];
+}

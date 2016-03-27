@@ -158,9 +158,58 @@ Mistakes I've made}
     }
 \end{frame}
 
+% Mistake: wildcard pattern matches
+% ---------------------------------
+
+\begin{frame}[fragile]{Mistake: wildcard pattern matches}
+    \begin{lstlisting}
+    data Murderer
+      = Innocent
+      | Murderer
+
+    canBeReleased
+      :: IsMurderer -> Bool
+    canBeReleased = \case
+      Innocent -> True
+      Murderer -> False
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Mistake: wildcard pattern matches}
+    \begin{lstlisting}
+    fireSquad :: IsMurderer -> Bool
+    fireSquad = \case
+      Innocent -> False
+      _        -> True
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Mistake: wildcard pattern matches}
+    \begin{lstlisting}
+    data IsMurderer
+      = Innocent
+      | Murderer
+      | Like99PercentSure
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Mistake: wildcard pattern matches}
+    Note: this also appears \\
+    in other forms!
+    \vspaced
+    \begin{lstlisting}
+    fireSquad :: IsMurderer -> Bool
+    fireSquad x = x /= Innocent
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Mistake: wildcard pattern matches}
+    It is often best to explicitly match on every constructor, unless you can be
+    sure no further constructors will be added (\code{Maybe}, \code{Either}...).
+\end{frame}
+
 % Mistake: you think you understand exceptions
 % --------------------------------------------
-
 
 \begin{frame}{Mistake: exceptions}
     Most common mistake: you think you understand how exceptions work in
@@ -302,6 +351,25 @@ Mistakes I've made}
     \vspaced
     \emph{Oliver Charles: \\
     24 days of GHC extensions}
+\end{frame}
+
+% Mistake: wrong string types
+% ---------------------------
+
+\begin{frame}{Mistake: string types}
+    \begin{enumerate}
+    \item Write some code
+    \item It's pretty slow
+    \item Find a stackoverflow thread from 2008 that tells me to use
+        \code{ByteString}
+    \item Z\boxed{?}rich
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Mistake: string types}
+    \begin{center}
+    \includegraphics[width=\textwidth]{images/strings.pdf}
+    \end{center}
 \end{frame}
 
 \end{document}
