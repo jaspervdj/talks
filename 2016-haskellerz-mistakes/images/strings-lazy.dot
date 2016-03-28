@@ -1,0 +1,25 @@
+digraph strings_lazy {
+    graph [fontname = "Helvetica", fontsize = 20]
+    node  [fontname = "Helvetica", fontsize = 20, shape = box]
+    edge  [fontname = "Helvetica", fontsize = 20]
+
+    root [label = "Easily fits in memory?"];
+
+    root -> in_memory [label = "Yes"];
+    in_memory [label = "Use Strict"];
+
+    root -> not_in_memory [label = "No"];
+    not_in_memory [label = "Single pass over the data?"];
+
+    not_in_memory -> single_pass [label = "Yes"];
+    single_pass [label = "Do you \"get\" unsafeInterleaveIO?"];
+
+    single_pass -> pipes [label = "No"];
+    pipes [label = "Use Pipes/Conduit/..."];
+
+    single_pass -> lazy [label = "Yes"];
+    lazy [label = "Use Lazy I/O"];
+
+    not_in_memory -> not_single_pass [label = "No"];
+    not_single_pass [label = "Database? mmap?"];
+}

@@ -353,6 +353,52 @@ Mistakes I've made}
     24 days of GHC extensions}
 \end{frame}
 
+% Mistake: not testing enough
+% ---------------------------
+
+\begin{frame}{Mistake: not testing enough}
+    \begin{center}
+    \emph{If it compiles, ship it.}
+    \end{center}
+\end{frame}
+
+\begin{frame}[fragile]{Mistake: not testing enough}
+    QuickCheck/SmallCheck \\
+    \vspaced
+    \begin{lstlisting}
+    prop_revRev xs =
+      reverse (reverse xs) == xs
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Mistake: not testing enough}
+    Lots of tutorials available on QuickCheck/SmallCheck, but many people only
+    use this to test a \emph{pure core} of their application.
+\end{frame}
+
+\begin{frame}{Mistake: not testing enough}
+    Test your entire application! \\
+    \vspaced
+    \begin{itemize}
+    \item \code{hspec-snap}
+    \item \code{hspec-webdrivers}
+    \item \code{tasty-golden}
+    \item \ldots
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Mistake: not testing enough}
+    Test your entire application! \\
+    \vspaced
+    \begin{itemize}
+    \item Roll your own framework
+    \item Bash
+    \item Python
+    \item JavaScript
+    \item \ldots
+    \end{itemize}
+\end{frame}
+
 % Mistake: wrong string types
 % ---------------------------
 
@@ -369,6 +415,12 @@ Mistakes I've made}
 \begin{frame}{Mistake: string types}
     \begin{center}
     \includegraphics[width=\textwidth]{images/strings.pdf}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Mistake: string types}
+    \begin{center}
+    \includegraphics[width=\textwidth]{images/strings-lazy.pdf}
     \end{center}
 \end{frame}
 
