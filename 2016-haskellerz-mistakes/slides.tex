@@ -13,6 +13,9 @@
 \usecolortheme{dove}
 \useoutertheme{default}
 
+% Remove navigation symbols
+\setbeamertemplate{navigation symbols}{}
+
 % Slightly smaller title
 \setbeamerfont{frametitle}{size=\large}
 \setbeamerfont{verb}{size=\small}
@@ -422,6 +425,218 @@ Mistakes I've made}
     \begin{center}
     \includegraphics[width=\textwidth]{images/strings-lazy.pdf}
     \end{center}
+\end{frame}
+
+% Mistake: not enough pure code
+% -----------------------------
+
+\begin{frame}[fragile]{Mistake: not enough pure code}
+    \begin{lstlisting}
+    main :: IO ()
+    main = do
+      x <- readLn :: IO Int
+      y <- readLn :: IO Int
+      -- wizzling
+      let wizzled =
+            x + y * y * 3 + 9
+      print wizzled
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Pure code: sometimes it's easy}
+    \begin{lstlisting}
+    wizzle :: Int -> Int -> Int
+    wizzle x y =
+      x + y * y * 3 + 9
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Pure code: sometimes it's easy}
+    \begin{lstlisting}
+    main :: IO ()
+    main = do
+      x <- readLn :: IO Int
+      y <- readLn :: IO Int
+      print $ wizzled x y
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Pure code: sometimes it's easy}
+    \begin{enumerate}
+    \item Read your input
+    \item Do your stuff
+    \item Write your output
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Pure code: sometimes it's hard}
+    \begin{itemize}
+    \item Can't read all input because of memory constraints
+    \item Input reading depends on temporary results
+    \item Need for threads, continuous output
+    \item \ldots
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Pure code: example}
+    \begin{lstlisting}
+    data Request = Request
+      { rqPath :: String
+      , ...
+      }
+
+    data Response
+      = Response200 String
+      | Response404
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Pure code: example}
+    \begin{lstlisting}
+    handler
+      :: Request -> IO Response
+    handler = do
+      rq <- readRequest
+      case rqPath rq of
+        "/index" ->
+          return $ Response200 "ok"
+        _        ->
+          return Response404
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Pure code: example}
+    \emph{Startup idea}: People can't be expected to reverse their own strings
+    if they are on a low-powered device like an IoT-enabled toaster. We should
+    have a cloud service for reversing a string.
+\end{frame}
+
+\begin{frame}[fragile]{Pure code: example}
+    \begin{lstlisting}
+    data Request = Request
+      { rqPath :: String
+      , rqBody :: String
+      , ...
+      }
+
+    data Response
+      = Response200 String
+      | Response404
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Pure code: example}
+    \begin{lstlisting}
+    handler = do
+      rq <- readRequest
+      case rqPath rq of
+        "/rev"   ->
+          return $ Response200 $
+            reverse (rqBody rq)
+        ...
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Pure code: example}
+    \begin{lstlisting}
+    data Request = Request
+      { rqPath :: String
+      , ...
+      }
+
+    data Response
+      = Response200 String
+      | Response404
+      | ReadBody
+          (String -> Response)
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Pure code: example}
+    \begin{lstlisting}
+    handler = do
+      rq <- readRequest
+      case rqPath rq of
+        "/rev"   -> return $
+          ReadBody $ \body ->
+            Response200 $
+            reverse body
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Pure code: example}
+    \begin{lstlisting}
+    run (Response200 str) =
+      sendResponse str
+    run Response404 =
+      error "404"
+    run (ReadBody f) = do
+      body <- readRequestBody
+      run (f body)
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Pure code: free}
+    \begin{lstlisting}
+    data Free (f :: * -> *) a
+      = Free (f (Free f a))
+      | Pure a
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Pure code: free}
+    \begin{lstlisting}
+    data Response
+      = Response200 String
+      | Response404
+
+    data HandlerF f a
+      = ReadBodyF (String -> f a)
+      deriving (Functor)
+
+    type Handler =
+        Free HandlerF
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Pure code: free}
+    \begin{lstlisting}
+    getBody :: Handler String
+    getBody = Free $
+        ReadBodyF return
+
+    ok200
+      :: String
+      -> Handler Response
+    ok200 str = Pure $
+        Response200 str
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Pure code: free}
+    \begin{lstlisting}
+    handler
+      :: Request
+      -> Handler Response
+    handler rq =
+      case rqPath rq of
+        "/rev" -> do
+          str <- getBody
+          ok200 $ reverse str
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Pure code: free}
+    \begin{lstlisting}
+    run :: Handler Response -> IO ()
+    run (Pure (Response200 str)) =
+      sendResponse str
+    run (Pure (Response404)) =
+      error "404"
+    run (Free (ReadBodyF f)) = do
+      body <- readRequestBody
+      run (f body)
+    \end{lstlisting}
 \end{frame}
 
 \end{document}
