@@ -45,6 +45,16 @@
     }
 }
 
+\newcommand{\chapterslide}[1]{
+    {
+        \begin{frame}[plain]
+        \begin{center}
+        \large{#1}
+        \end{center}
+        \end{frame}
+    }
+}
+
 \newcommand{\code}[1]{
     \texttt{\small{#1}}
 }
@@ -68,7 +78,8 @@ Mistakes I've made}
     \begin{itemize}
     \item I really like Haskell
     \item Contributed to and authored open source projects
-    \item Worked at Better, currently at Luminal
+    \item Did some consulting for various companies
+    \item Worked at Better, currently at \code{fugue.co}
     \end{itemize}
 \end{frame}
 
@@ -77,13 +88,23 @@ Mistakes I've made}
     code smell.
 \end{frame}
 
-\begin{frame}{What this talk is not about}
-    Trivial mistakes: syntax or type errors. We only talk about code that is
-    accepted by the compiler.
+\begin{frame}[fragile]{What this talk is not about}
+    We only talk about code that is accepted by the compiler.
+    \vspaced
+    \begin{lstlisting}
+    fib :: Int -> Int
+    fib n =
+      | n <= 1    = 1
+      | otherwise =
+          fib (n - 1) +
+          fib (n - 2)
+    \end{lstlisting}
 \end{frame}
 
 % Pick your battles
 % -----------------
+
+\chapterslide{Intro: pick your battles}
 
 \begin{frame}{Pick your battles}
     It's often impossible to have perfectly clean code \emph{everywhere} in
@@ -126,6 +147,8 @@ Mistakes I've made}
 % Mistake: not using `-Wall`
 % --------------------------
 
+\chapterslide{Mistake: not using \code{-Wall}}
+
 \begin{frame}{Mistake: not using \code{-Wall}}
     \emph{Always} compile using \code{-Wall}. \\
     Use \code{-Werror} for production/tests.
@@ -148,13 +171,13 @@ Mistakes I've made}
 \begin{frame}{Medium-risk \code{-Wall}}
     \small{
     \texttt{-fwarn-unused-binds},
+    \texttt{-fwarn-unused-matches},
     \texttt{-fwarn-auto-orphans}
     }
 \end{frame}
 
 \begin{frame}{High-risk \code{-Wall}}
     \small{
-    \texttt{-fwarn-unused-matches}
     \texttt{-fwarn-incomplete-patterns}
     \texttt{-fwarn-incomplete-uni-patterns}
     \texttt{-fwarn-incomplete-record-updates}
@@ -163,6 +186,8 @@ Mistakes I've made}
 
 % Mistake: wildcard pattern matches
 % ---------------------------------
+
+\chapterslide{Mistake: wildcard pattern matches}
 
 \begin{frame}[fragile]{Mistake: wildcard pattern matches}
     \begin{lstlisting}
@@ -213,6 +238,8 @@ Mistakes I've made}
 
 % Mistake: you think you understand exceptions
 % --------------------------------------------
+
+\chapterslide{Mistake: you think you understand exceptions}
 
 \begin{frame}{Mistake: exceptions}
     Most common mistake: you think you understand how exceptions work in
@@ -305,6 +332,8 @@ Mistakes I've made}
 % Avoiding GHC Extensions
 % -----------------------
 
+\chapterslide{Mistake: avoiding GHC extensions}
+
 \begin{frame}{Mistake: avoiding GHC extensions}
     Before I wrote Haskell: C/C++ background. Lots of pain trying to get things
     compiling on MSVC++.
@@ -359,6 +388,8 @@ Mistakes I've made}
 % Mistake: not testing enough
 % ---------------------------
 
+\chapterslide{Mistake: not testing enough}
+
 \begin{frame}{Mistake: not testing enough}
     \begin{center}
     \emph{If it compiles, ship it.}
@@ -405,6 +436,8 @@ Mistakes I've made}
 % Mistake: wrong string types
 % ---------------------------
 
+\chapterslide{Mistake: string types}
+
 \begin{frame}{Mistake: string types}
     \begin{enumerate}
     \item Write some code
@@ -429,6 +462,8 @@ Mistakes I've made}
 
 % Mistake: not enough pure code
 % -----------------------------
+
+\chapterslide{Mistake: not enough pure code}
 
 \begin{frame}[fragile]{Mistake: not enough pure code}
     \begin{lstlisting}
@@ -590,8 +625,8 @@ Mistakes I've made}
       = Response200 String
       | Response404
 
-    data HandlerF f a
-      = ReadBodyF (String -> f a)
+    data HandlerF a
+      = ReadBodyF (String -> a)
       deriving (Functor)
 
     type Handler =
@@ -638,5 +673,90 @@ Mistakes I've made}
       run (f body)
     \end{lstlisting}
 \end{frame}
+
+% Mistake: overdoing abstraction
+% ------------------------------
+
+\chapterslide{Mistake: overdoing abstraction}
+
+\begin{frame}[fragile]{Mistake: overdoing abstraction}
+    \begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+    zygoHistoPrepro
+      :: (Unfoldable t, Foldable t)
+      => (Base t b -> b)
+      -> (forall c. Base t c -> Base t c)
+      -> (Base t (EnvT b (Stream (Base t)) a)
+            -> a)
+      -> t -> a
+    zygoHistoPrepro f g t =
+      -- unless you want a generalized
+      -- zygomorphism.
+      gprepro (distZygoT f distHisto) g t
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Mistake: overdoing abstraction}
+    \begin{lstlisting}
+    getProp k =
+      case getProperty k m of
+        Left  err -> fail err
+        Right val ->
+          return (show val)
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Mistake: overdoing abstraction}
+    Or do you prefer this version? \\
+    \vspaced
+    \begin{lstlisting}
+    getProp =
+      either fail (return . show) .
+      flip getProperty
+    \end{lstlisting}
+\end{frame}
+
+% Mistake: premature abstraction
+% ------------------------------
+
+\chapterslide{Mistake: Premature abstraction}
+
+\begin{frame}{Mistake: premature abstractions}
+    Example: the resource provider in \emph{Hakyll}. \\
+    \vspaced
+    An abstaction around the file system to list and obtain resources as various
+    types. It provides some caching and access to metadata.
+\end{frame}
+
+\begin{frame}{Mistake: premature abstractions}
+    \begin{itemize}
+    \item Zero or one instances
+    \item Lots of code working around restrictions
+    \item Making assumptions about specific behaviours
+    \item Too general
+    \item Too abstract
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Mistake: premature abstractions}
+    (Historically incorrect) example: \\
+    \vspaced
+    \begin{lstlisting}
+    class Functor m => Monad m where
+      return :: a -> m a
+      join   :: m (m a) -> m a
+
+      -- wat
+      fail   :: String -> m a
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Mistake: premature abstractions}
+    Abstractions are very hard to get right. \\
+    \vspaced
+    In general, just writing and repeating the non-abstract code until you
+    \emph{really} see the pattern helps.
+\end{frame}
+
+\chapterslide{Questions?}
 
 \end{document}
