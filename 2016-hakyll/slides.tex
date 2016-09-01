@@ -1,0 +1,352 @@
+% slides.tex
+\documentclass[20pt]{beamer}
+\usepackage{listings}
+\usepackage[utf8]{inputenc}
+\usepackage{cancel}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{pdfpages}
+\usepackage{amsmath}
+\usepackage{xcolor}
+
+\usetheme{default}
+\usecolortheme{dove}
+\useoutertheme{default}
+
+% Remove navigation symbols
+\setbeamertemplate{navigation symbols}{}
+
+% Slightly smaller title
+\setbeamerfont{frametitle}{size=\large}
+\setbeamerfont{verb}{size=\small}
+
+% Font
+\renewcommand{\ttdefault}{pcr}
+
+% lst settings
+\lstset{
+    basicstyle=\ttfamily\footnotesize,
+    gobble=4,
+    keywordstyle=\ttfamily\bfseries,
+    showstringspaces=false
+}
+
+\newcommand{\vspaced}{
+    \vspace{5mm}
+}
+
+\newcommand{\fullimageframe}[1]{
+    {
+        \usebackgroundtemplate{
+            \includegraphics[height=\paperheight,width=\paperwidth]{#1}}
+        \setbeamertemplate{navigation symbols}{}
+        \begin{frame}[plain]
+        \end{frame}
+    }
+}
+
+\newcommand{\imageframe}[1]{
+    {
+        \begin{frame}[plain]
+        \begin{center}
+        \includegraphics[width=\textwidth]{#1}
+        \end{center}
+        \end{frame}
+    }
+}
+
+\newcommand{\chapterslide}[1]{
+    {
+        \begin{frame}[plain]
+        \begin{center}
+        \large{#1}
+        \end{center}
+        \end{frame}
+    }
+}
+
+\newcommand{\code}[1]{
+    \texttt{\small{#1}}
+}
+
+\definecolor{asparagus}{rgb}{0.53, 0.66, 0.42}
+\definecolor{bittersweet}{rgb}{1.0, 0.44, 0.37}
+
+\begin{document}
+
+\title{Hakyll: \\
+tutorial and internals}
+\subtitle{Munihac}
+\author{Jasper Van der Jeugt}
+\date{September 2, 2016}
+
+\begin{frame}[plain]
+    \titlepage
+\end{frame}
+
+\begin{frame}{About me}
+    \begin{itemize}
+    \item I really like Haskell
+    \item Contributed to and authored open source projects
+    \item Did some consulting for various companies
+    \item Worked at Better, currently at \code{fugue.co}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{What this talk is about}
+    \emph{Beginner} Haskell ``Mistakes'' that can be avoided, signs of Haskell
+    code smell.
+\end{frame}
+
+\chapterslide{Hakyll: Dependency handling}
+
+\begin{frame}{Dependency handling}
+    Two big questions: \\
+    \vspaced
+    In what order should we build items? \\
+    Which items are out-of-date? \\
+\end{frame}
+
+\chapterslide{Scheduling items}
+
+\imageframe{{images/deps-01.dot}.pdf}
+
+\begin{frame}{Scheduling items}
+    \begin{enumerate}
+    \item \code{a.jpg}
+    \item \code{b.jpg}
+    \item \code{default.html}
+    \item \code{index.html}
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Scheduling items}
+    \begin{enumerate}
+    \item \code{b.jpg}
+    \item \code{default.html}
+    \item \code{a.jpg}
+    \item \code{index.html}
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Scheduling items}
+    But there is no order information in the \code{site.hs}!
+\end{frame}
+
+\begin{frame}{Scheduling items}
+    Early Hakyll versions: compute dependency graph \emph{before} starting to
+    build.  This was based on \emph{Arrows}.
+\end{frame}
+
+\begin{frame}[fragile]{Scheduling items}
+    Problem with \emph{Arrows}: \\
+    \vspaced
+    \begin{lstlisting}
+    field "authorBio" $ \item ->
+      let self = itemIdentifier item
+      authorPath <-
+        getMetadataField self "author"
+      bio <- load
+        (fromFilePath authorPath)
+      ...
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Scheduling items}
+    Not requiring to compute the dependency graph before we start the build is
+    \emph{way more flexible}!
+\end{frame}
+
+\begin{frame}{Compiler Monad}
+    We solve this ---unsurprisingly--- by having a sort of AST and
+    \emph{interpreter}.
+\end{frame}
+
+\begin{frame}[fragile]{Compiled Monad}
+    \begin{lstlisting}
+    data CompilerResult a
+      = CompilerDone a
+      | CompilerError String
+      | CompilerRequire
+          Identifier (Compiler a)
+
+    newtype Compiler a = Compiler
+      { unCompiler ::
+          IO (CompilerResult a)
+      }
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Compiled Monad}
+    \begin{lstlisting}
+    return =
+      Compiler . return . CompilerDone
+    Compiler c0 >>= f = Compiler $ do
+      res <- c0
+      case res of
+        CompilerDone x ->
+          unCompiler $ f x
+        CompilerError e ->
+          return $ CompilerError e
+        CompilerRequire i c1 -> return $
+          CompilerRequire i (c1 >>= f)
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Scheduler}
+    \begin{lstlisting}
+    data ScheduleState
+      = Done
+      | forall a. Paused (Compiler a)
+
+    type Scheduler =
+      M.Map Identifier ScheduleState
+
+    -- Everything starts in 'Paused'...
+
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Scheduler}
+    \begin{lstlisting}
+    schedule
+      :: Identifier -> Scheduler
+      -> IO Scheduler
+    schedule id0 scheduler =
+      case M.lookup id0 scheduler of
+        Nothing -> fail "..."
+        Just Done -> return scheduler
+        Just (Paused c0) -> do
+          res <- unCompiler c0
+          case res of
+            ...
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Scheduler}
+    \begin{lstlisting}
+    case res of
+      CompilerDone x -> return $
+        M.insert id0 Done scheduler
+      CompilerError e ->
+        fail e
+      CompilerRequire id1 c1 -> schedule
+        id1
+        (M.insert id0
+          (Paused c1) scheduler)
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Scheduler}
+    Some other things: \\
+    \vspaced
+    Cycle detection \\
+    Writing to disk and cache \\
+    \ldots
+\end{frame}
+
+\chapterslide{Out-of-date items}
+
+\begin{frame}[fragile]{Out-of-date items}
+    \begin{lstlisting}
+    data ScheduleState
+      = Done
+      | forall a. Paused (Compiler a)
+
+    type Scheduler =
+      M.Map Identifier ScheduleState
+
+    -- Everything starts in 'Paused'...
+    -- Or not...
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Out-of-date items}
+    Before we start scheduling items we have no idea what the dependency graph
+    will look like. \\
+    \vspaced
+    But we know what it looked like for the previous run.
+\end{frame}
+
+\imageframe{{images/deps-01.dot}.pdf}
+\imageframe{{images/deps-02.dot}.pdf}
+\imageframe{{images/deps-03.dot}.pdf}
+\imageframe{{images/deps-04.dot}.pdf}
+\imageframe{{images/deps-05.dot}.pdf}
+\imageframe{{images/deps-06.dot}.pdf}
+
+\begin{frame}{Out-of-date items}
+    When we build an item, we store: \\
+    \vspaced
+    The result, obviously \\
+    The list of dependencies!
+\end{frame}
+
+\begin{frame}[fragile]{Out-of-date items}
+    On re-run: \\
+    \vspaced
+    \begin{lstlisting}
+    "index.html":
+      [ "a.jpg"
+      , "b.jpg"
+      , "default.html"
+      ]
+    \end{lstlisting}
+\end{frame}
+
+\imageframe{{images/deps-04.dot}.pdf}
+
+\begin{frame}[fragile]{Out-of-date items}
+    We loaded the list using: \\
+    \vspaced
+    \begin{lstlisting}
+    loadAll "pictures/*" >>= recentFirst
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Out-of-date items}
+    A pattern can be considered as a \emph{predicate} on identifiers. \\
+    \vspaced
+    \begin{lstlisting}
+    data Pattern = ...
+
+    instance Binary Pattern -- !!!
+
+    loadAll
+      :: (Binary a, Typeable a)
+      => Pattern
+      -> Compiler [Item a]
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Out-of-date items}
+    \begin{lstlisting}
+    data Dependency
+      = ItemDep Identifier
+      -- Pattern, and result
+      | PatternDep Pattern [Identifier]
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Out-of-date items}
+    \begin{lstlisting}
+    "index.html":
+      [ PatternDep
+          "pictures/*"
+          ["a.jpg", "b.jpg"]
+      , ItemDep "a.jpg"
+      , ItemDep "b.jpg"
+      , ItemDep "default.html"
+      ]
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Out-of-date items}
+    Conclusion: we can \emph{re-evaluate} the \code{Pattern} and check the new
+    result against the result from the previous run.  If there is a difference,
+    the item is out-of-date.
+\end{frame}
+
+\chapterslide{Questions?}
+
+\end{document}

@@ -1,0 +1,16 @@
+digraph strings {
+    graph [fontname = "Helvetica", fontsize = 20]
+    node  [fontname = "Helvetica", fontsize = 20, shape = box, style = filled]
+    edge  [fontname = "Helvetica", fontsize = 20]
+
+    index [label = "index.html", fillcolor = "#99ff99"];
+    default [label = "default.html", fillcolor = "#99ff99"];
+    a [label = "a.jpg", fillcolor = "#99ff99"];
+    b [label = "b.jpg", fillcolor = "#99ff99"];
+    c [label = "c.jpg", fillcolor = "#99ff99"];
+
+    index -> default;
+    index -> a;
+    index -> b;
+    index -> c;
+}
