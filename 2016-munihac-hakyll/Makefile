@@ -7,11 +7,11 @@ slides.pdf: slides.tex \
 		images/deps-04.dot.pdf \
 		images/deps-05.dot.pdf \
 		images/deps-06.dot.pdf
-	xelatex $<
+	xelatex -halt-on-error $<
 
 images/%.dot.pdf: images/%.dot
 	dot -Tpdf $< >$@
 
 clean:
 	rm -f slides.pdf
-	rm -f images/*.pdf
+	rm -f images/*.dot.pdf

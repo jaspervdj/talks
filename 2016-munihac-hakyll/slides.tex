@@ -86,17 +86,152 @@ tutorial and internals}
 
 \begin{frame}{About me}
     \begin{itemize}
-    \item I really like Haskell
+    \item I like skateboards, photography and Haskell
     \item Contributed to and authored open source projects
-    \item Did some consulting for various companies
-    \item Worked at Better, currently at \code{fugue.co}
+    \item Worked with Haskell for some companies
+    \item Currently at \code{fugue.co}
     \end{itemize}
 \end{frame}
 
-\begin{frame}{What this talk is about}
-    \emph{Beginner} Haskell ``Mistakes'' that can be avoided, signs of Haskell
-    code smell.
+\begin{frame}{About this talk}
+    \begin{itemize}
+    \item Static site generators?
+    \item Hakyll
+    \item Tutorial/demo
+    \item Dependency handling
+    \end{itemize}
 \end{frame}
+
+\chapterslide{Static site generators}
+
+\begin{frame}{Static site generators}
+    Back when things were simple \\
+    \vspaced
+    \begin{itemize}
+    \item Write HTML
+    \item FTP to server
+    \item svn commit
+    \item everyone was happy
+    \item then something horrible happened
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Static site generators}
+    TODO: Picture of php?
+\end{frame}
+
+\imageframe{images/cms.png}
+
+\begin{frame}{Static site generators}
+    \small{
+    Ace acrylamid Blacksmith Blogofile Bonsai Cactus Chisel coleslaw
+    Composer cyrax Deplot Fairytale Floyd FMPP Frank fugitive gostatic Graze
+    \textbf{Hakyll} Hammer Hastie Hobix Hyde Jekyll jinjet jkl Korma Letterpress
+    Machined Magneto Markbox Markdoc Middleman mynt nanoc Nikola Pagegen
+    Pelican Petrify Phrozn PieCrust Pilcrow Pith poole Punch Quill...
+    }
+\end{frame}
+
+\begin{frame}[fragile]{Static site generators}
+    \textbf{\texttt{posts/munihac.md}}:
+    \vspaced
+    \begin{lstlisting}
+    ---
+    title: Munihac
+    ---
+
+    I am **really** looking
+    forward to it.
+
+    I should ask mom if I'm
+    allowed to go.
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Static site generators?}
+    \textbf{\texttt{templates/post.html}}:
+    \vspaced
+    \begin{lstlisting}[language=HTML]
+    <h1>$title$</h1>
+    <div class="post">
+      $body$
+    </div>
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Static site generators?}
+    \textbf{\texttt{\_site/posts/munihac.html}}:
+    \vspaced
+    \begin{lstlisting}[language=HTML]
+    <h1>Munihac</h1>
+    <div>
+      <p>
+        I am <strong>really</strong>
+        looking forward to it.
+      </p>
+      ...
+    </div>
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Static site generators?}
+    \textbf{Advantage: super fast} \\
+    \vspaced
+    One \texttt{sendfile(2)} vs. a few database queries and rendering the final
+    result \\
+    \vspaced
+    Akamai, Amazon CloudFront\ldots
+\end{frame}
+
+\begin{frame}[fragile]{Static site generators?}
+    \textbf{Advantage: no vulnerabilities} \\
+    \vspaced
+    \begin{lstlisting}[language=bash]
+    curl
+      http://site.com/archive.php\
+      ?query=DELETE+FROM+...
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Static site generators?}
+    \textbf{Advantage: host support} \\
+    \vspaced
+    \textbf{CMS:} Apache, FTP, Python, MySQL, memcached\ldots \\
+    \vspaced
+    \textbf{SSG:} I can probably host it on my microwave if I need to
+\end{frame}
+
+\begin{frame}[fragile]{Static site generators?}
+    \textbf{Advantage: use version control} \\
+    \vspaced
+    \begin{lstlisting}[language=bash]
+    $ git log
+    72fb81 Add WebSockets blogpost
+    5ebaf9 Typo fixes
+    f93858 Quick CSS fix
+    2913bb Update homepage
+    ...
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Static site generators?}
+    \textbf{Advantage: use your favorite text editor (which is VIM)} \\
+    \vspaced
+    \includegraphics[width=\textwidth]{images/wysiwyg.png}
+\end{frame}
+
+\chapterslide{Hakyll}
+
+\begin{frame}{Hakyll}
+    \begin{itemize}
+    \item Fairly mature (2009)
+    \item Haskell, Pandoc
+    \item Configuration = Code
+    \item More library than application
+    \end{itemize}
+\end{frame}
+
+\chapterslide{Tutorial/demo}
 
 \chapterslide{Hakyll: Dependency handling}
 
