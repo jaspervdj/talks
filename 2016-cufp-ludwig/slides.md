@@ -1,6 +1,8 @@
-%title: Ludwig - Creating an approachable Haskell DSL
-%author: Jasper Van der Jeugt
-%date: 24-09-2016
+---
+title: Ludwig - Creating an approachable Haskell DSL
+author: Jasper Van der Jeugt
+date: 24-09-2016
+...
 
 # Overview
 
@@ -349,13 +351,11 @@ advantages are worth it.
 
 ---
 
-    
-         ____________ 
-        < Questions? >
-         ------------ 
-                \   ^__^
-                 \  (oo)\_______
-                    (__)\       )\/\
-                        ||----w |
-                        ||     ||
-    
+     ____________ 
+    < Questions? >
+     ------------ 
+            \   ^__^
+             \  (oo)\_______
+                (__)\       )\/\
+                    ||----w |
+                    ||     ||
