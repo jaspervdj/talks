@@ -85,7 +85,7 @@ Well,
 
 # Why not YAML?
 
-## Advantaged of a "real" language
+## Advantages of a "real" language
 
 - Module system
 - Documentation generator
@@ -257,6 +257,22 @@ that enables code reuse.
     
     vpc-a: vpc("10.0.0.0/16")
     vpc-b: vpc("192.168.100.0/22")
+
+---
+
+# Function call shorthands
+
+Partly inspired by Python: `u"ラーメン"`
+
+Easy for `String`:
+
+    c1: cidr("10.0.0.0/16")
+    c2: cidr"10.0.0.0/16"
+
+Also supported for records, lists, dictionaries.
+
+    bar: f1 {k1: "v", k2: True}
+    qux: f2 [0, 2, 4]
 
 ---
 
