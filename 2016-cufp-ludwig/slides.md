@@ -1,8 +1,22 @@
 ---
-title: Ludwig - Creating an approachable Haskell DSL
+title: Ludwig - Creating an approachable Haskell-like DSL
 author: Jasper Van der Jeugt
 date: 24-09-2016
 ...
+
+              ______
+             / ____/_  ______ ___  _____
+            / /_  / / / / __ `/ / / / _ \
+           / __/ / /_/ / /_/ / /_/ /  __/
+          /_/    \__,_/\__, /\__,_/\___/
+                      /____/
+
+    Creating an approachable Haskell-like DSL
+
+                     CUFP 2016
+                    Nara, Japan
+
+---
 
 # Overview
 
@@ -15,7 +29,22 @@ After you declare you configuration (in our DSL), Fugue
 sets up, and then continuously enforces and monitors your
 infrastructure.  Currently, it is available for AWS.
 
-<http://fugue.co>
+More info: <http://fugue.co>
+
+---
+
+# Fugue Architecture
+
+1. Compile and validate specification (as far as possible)
+2. Ship to the _Conductor_
+
+The _Conductor_ is a very complex piece of software but we
+can view it as a black box in this talk.
+
+    $ fugue run --alias prod SocialNetwork.lw
+    $ vim SocialNetwork.lw
+    $ fugue update prod SocialNetwork.lw
+    $ fugue kill prod
 
 ---
 
@@ -388,8 +417,9 @@ advantages are worth it.
         | Optional a
 
 - Special info added to the equality constraints in two
-  places
-- Constraint solver has an extra case to handle this info
+  places.
+- Constraint solver has an extra case to handle this info.
+- Lose principal types in certain expressions.  :-(
 
 ---
 
