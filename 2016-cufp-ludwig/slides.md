@@ -16,8 +16,6 @@ date: 24-09-2016
                      CUFP 2016
                     Nara, Japan
 
----
-
 # Overview
 
 ## About Fugue
@@ -30,8 +28,6 @@ sets up, and then continuously enforces and monitors your
 infrastructure.  Currently, it is available for AWS.
 
 More info: <http://fugue.co>
-
----
 
 # Fugue Architecture
 
@@ -46,8 +42,6 @@ can view it as a black box in this talk.
     $ fugue update prod SocialNetwork.lw
     $ fugue kill prod
 
----
-
 # Overview
 
 ## About Ludwig
@@ -57,8 +51,6 @@ configuration.  It is inspired by languages like Haskell and
 Ocaml, but also by YAML and JSON.
 
 The compiler, `lwc`, is written in Haskell.
-
----
 
 # Why not YAML?
 
@@ -71,8 +63,6 @@ Well,
         with_items: [0, 2, 4]
         when: item > 2
 
----
-
 # Why not YAML?
 
 ## Problems
@@ -80,8 +70,6 @@ Well,
 - How do you document YAML files?
 - Where do you store configurations?
 - How do you provide error messages?
-
----
 
 # Why not YAML?
 
@@ -91,15 +79,11 @@ Well,
 - Documentation generator
 - Type system
 
----
-
 # Ludwig design goals
 
 - Simple things should be simple
 - Complex things should be possible in a clean way
 - Don't try to build Haskell 2.0
-
----
 
 # A typed language
 
@@ -111,8 +95,6 @@ A classic Virtual Private Cloud:
         region: Us-east-1
         cidr: "10.0.0.0/16"
 
----
-
 # A typed language
 
 ## Simple example
@@ -123,8 +105,6 @@ With explicity type annotation:
         region: Us-east-1
         cidr: "10.0.0.0/16"
 
----
-
 # A typed language
 
 ## Simple example
@@ -134,8 +114,6 @@ Let's try another region:
     {region: Region, cidr: String} my-vpc:
         region: Us-east-3
         cidr: "10.0.0.0/16"
-
----
 
 # A typed language
 
@@ -153,8 +131,6 @@ Let's try another region:
       Hint: perhaps you mean the constructor
       Us-east-1 (from Fugue.Core.AWS.Common)
 
----
-
 # The type system
 
 ## Scoped labels
@@ -163,8 +139,6 @@ Initially based on "scoped labels" by Daan Leijen, 2005
 
 - Very simple rules with good type inference
 - Allows extending and updating fields
-
----
 
 # The type system
 
@@ -183,8 +157,6 @@ Initially based on "scoped labels" by Daan Leijen, 2005
     # Update field
     my-vpc-3: {region := Us-west-1 | my-vpc}
 
----
-
 # The type system
 
 ## Scoped labels: disadvantages
@@ -194,8 +166,6 @@ why this is a good idea to someone who has had little
 exposure to typed programming languages.
 
 Alternative solution: _extend = update_ (field shadowing).
-
----
 
 # The type system
 
@@ -212,8 +182,6 @@ Alternative solution: _extend = update_ (field shadowing).
 
 Still able to infer principal types!
 
----
-
 # The type system
 
 ## Records
@@ -227,8 +195,6 @@ updates.
 
 Desugars to simple record updates (with `case` statements
 for constructors).
-
----
 
 # Patterns
 
@@ -247,8 +213,6 @@ that enables code reuse.
       privateSubnets: []
     }
 
----
-
 # Functions
 
     fun vpc(cidr: String) -> Vpc:
@@ -257,8 +221,6 @@ that enables code reuse.
     
     vpc-a: vpc("10.0.0.0/16")
     vpc-b: vpc("192.168.100.0/22")
-
----
 
 # Function call shorthands
 
@@ -273,8 +235,6 @@ Also supported for records, lists, dictionaries.
 
     bar: f1 {k1: "v", k2: True}
     qux: f2 [0, 2, 4]
-
----
 
 # Functions
 
@@ -291,8 +251,6 @@ Unfortunately the AWS API is a huge beast in many ways:
       ) -> LaunchConfiguration:
         ...
 
----
-
 # Optional type
 
 Ludwig's version of `Maybe` in Haskell:
@@ -300,8 +258,6 @@ Ludwig's version of `Maybe` in Haskell:
     type Optional<a>:
         | None
         | Optional a
-
----
 
 # Functions
 
@@ -311,8 +267,6 @@ And code like this is not very nice to read:
         Optional("zDebugKey"), None, None, M3_Large, None,
         ...
       )
-
----
 
 # Named parameters
 
@@ -329,8 +283,6 @@ This is slightly better:
 
 How do we add named parameters to a Haskell-like language?
 
----
-
 # Idea: named parameters through records
 
 A function is named parameters is simply a unary function.
@@ -344,8 +296,6 @@ The only argument is a record.
         blockDeviceMappings: None,
         ...
       }
-
----
 
 # Idea: named parameters through records
 
@@ -361,8 +311,6 @@ Type inference works well here: the function now takes the
 same "arguments" as `launch-configuration` minus the
 `instanceType` field.
 
----
-
 # Named parameters: None padding
 
 This is very verbose:
@@ -375,8 +323,6 @@ This is very verbose:
         blockDeviceMappings: None,
         ...
       }
-
----
 
 # Named parameters: None padding
 
@@ -395,8 +341,6 @@ function applications**.
   fields (when this info is present).
 - Interpreter: missing fields are `None`.
 
----
-
 # Named parameters: Optional lifting
 
     lca: launch-configuration{
@@ -408,8 +352,6 @@ One issue remaining: try explaining to a system
 administrator who has only seen bash and Python why the
 `Optional()` call is necessary here.
 
----
-
 # Named parameters: Optional lifting
 
     lca: launch-configuration{
@@ -420,8 +362,6 @@ administrator who has only seen bash and Python why the
 Similar syntax-based coercion: we allow converting `a` to
 `Optional<a>` on the right hand side of a record
 construction or record update.
-
----
 
 # Conclusion
 
@@ -437,7 +377,7 @@ advantages are worth it.
 - Constraint solver has an extra case to handle this info.
 - Lose principal types in certain expressions.  :-(
 
----
+# Questions?
 
      ____________ 
     < Questions? >
