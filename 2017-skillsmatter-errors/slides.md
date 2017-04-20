@@ -9,6 +9,12 @@ patat:
 
 # Introduction
 
+## Update: recording
+
+A recording of this talk is available here:
+
+<https://skillsmatter.com/skillscasts/9879-an-informal-guide-to-better-compiler-errors-jasper-van-der-jeugt>
+
 ## About me
 
 - Got started with Haskell a long time ago
