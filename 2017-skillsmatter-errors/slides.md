@@ -15,6 +15,8 @@ A recording of this talk is available here:
 
 <https://skillsmatter.com/skillscasts/9879-an-informal-guide-to-better-compiler-errors-jasper-van-der-jeugt>
 
+The slides are fairly concise in some places so I would recommend watching the video instead.
+
 ## About me
 
 - Got started with Haskell a long time ago
