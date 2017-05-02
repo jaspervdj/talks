@@ -243,12 +243,12 @@ data Validation e a
 . . .
 
 ```haskell
-instance Monoid e => Applicative e where
+instance Monoid e => Applicative (Validation e) where
   pure x = Success x
 
   Success f  <*> Success x  = Success (f x)
   Failure e1 <*> Success _  = Failure e1
-  Success _  <*> Success e2 = Failure e2
+  Success _  <*> Failure e2 = Failure e2
   Failure e1 <*> Failure e2 = Failure (e1 <> e2)
 ```
 
