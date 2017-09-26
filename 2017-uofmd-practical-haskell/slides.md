@@ -126,11 +126,71 @@ What you need to write applications:
 
 ## Goal of this talk
 
-Show some practical patterns to demonstrate our claims:
+1. Introduce some tools to work with Haskell
+2. Show some practical patterns to demonstrate our claims:
+    - Haskell is _safe_
+    - Haskell is _fast_
+    - Haskell is _flexible_
 
-- Haskell is _safe_
-- Haskell is _fast_
-- Haskell is _flexible_
+# Some tools
+
+## Building Haskell
+
+Compiler: GHC
+
+. . .
+
+- strictness analyzer
+- monadic I/O
+- unboxed data types
+- concurrent and parallel programming models (STM!)
+- profiler
+- ...
+
+## Build systems / package managers
+
+Three viable options:
+
+- cabal
+- stack
+- nix
+
+## Profiling
+
+- GHC can produce, on its own:
+    * A profiling summary
+    * Heap profiles
+    * Time/alloc profiles
+- There are tools to visualise both kinds of information:
+    * hp2ps
+    * profiteur
+- For IO based and concurrency-heavy applications, this breaks down, but:
+    * ThreadScope
+
+## Deploying
+
+Too many options to list...
+
+- GHC produces a static binary by default
+- `stack` can produce a docker image
+
+What I usually do these days is creating a docker image and put it in a cluster
+on EC2 Container Service (AWS).
+
+## Debugging
+
+This is one area where Haskell is somewhat lacking:
+
+. . .
+
+- Setting breakpoints in GHCi
+- Usually a combination of trace/print...
+- GHC recently added stack traces!
+- GDB _can_ be used (but only on the assembly level...)
+
+. . .
+
+Fortunately, the type system prevents many kinds of errors
 
 # Practical patterns: Monoid
 
@@ -886,6 +946,6 @@ Fortunately, Haskell is not really a hammer, it's a toolbox!
 
 . . .
 
-It can't do everything, but it's close.
+It can't do everything (there's still GC), but it's close.
 
 # Questions?
