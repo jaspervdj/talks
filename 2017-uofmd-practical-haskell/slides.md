@@ -68,7 +68,7 @@ You start building an MVP for your hip new startup:
 
 . . .
 
-A great Haskell feature is that allows you to write both slow and fast code!
+A great Haskell feature is that it allows you to write both slow and fast code!
 
 ## Haskell is flexible
 
@@ -787,7 +787,7 @@ createUserWith = ...
 
 Is `new` enough or do we also need a `close`?
 
-Haskell is garbage collect, but...
+Haskell is garbage collected, but...
 
 . . .
 
@@ -850,7 +850,7 @@ with Database(config) as database:
 ```haskell
 main = do
     database <- Database.new config
-    (doSomething database) `finally` Database.close database
+    doSomething database `finally` Database.close database
 ```
 
 . . .
