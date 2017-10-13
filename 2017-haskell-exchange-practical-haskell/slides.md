@@ -92,6 +92,31 @@ Provides a simple 10-minute email application.
 
 Code at <https://github.com/jaspervdj/fugacious>
 
+. . .
+
+Balancing exercise in:
+
+- Doing things right™
+- Keeping things simple™
+
+## Sample application
+
+Deployment: not trivial
+
+1. Build a docker container with our app as entry point
+2. Push this to AWS ECR
+3. Create a cluster, load balancer...
+4. Create a queue and topic to receive mail
+5. ...
+
+. . .
+
+Conclusion: not really harder (or easier) than other languages.
+
+. . .
+
+Only _after_ deployment we can see if we did things right™
+
 # Haskell's module system
 
 ## Haskell's module system
@@ -160,7 +185,6 @@ Use ad-hoc datatypes liberally!
 
 <https://jaspervdj.be/posts/2016-05-11-ad-hoc-datatypes.html>
 
-
 ## Smell: Types modules
 
 Which is better?
@@ -183,6 +207,11 @@ getMail :: Text -> GetMailResult
 
 ## Smell: Types modules
 
+Ad-hoc types can simplify business logic considerably and allow you to "split
+up" the problem into more parts.
+
+. . .
+
 Conclusion: Types belong with their problem domain
 
 ## Smell: Types modules
@@ -203,7 +232,7 @@ But I want to be able to re-export `parseMail` from `Fugacious.Mail`...
 ## Smell: Types modules
 
 - `Internal` modules are not a code smell
-- `Internal` modules should _probably_ be exposed (but discouraged)
+- `Internal` modules should _probably_ be exposed (but usage discouraged)
 - `Internal` modules can be nested, e.g.:
 
         Fugacious.Mail.Internal        -- Provides type, some simple functions
@@ -287,7 +316,7 @@ Conclusion:
 
 ## Smell: Utils module
 
-Bonus: `Prelude.Extended`, usefull if you use certain functions all the time
+Bonus: `Prelude.Extended`, useful if you use certain functions all the time
 
 . . .
 
@@ -350,7 +379,7 @@ push body = do
 ## Handle: organizing impure code
 
 Sometimes our code can be nicely captured in beautiful mathematically sound
-patterns
+patterns (Monoid, Monad...)
 
 . . .
 
@@ -359,13 +388,6 @@ But at other times, we can't do that:
 - We have deadlines
 - We are dealing with inherently mutable state
 - We need to use some external code which doesn't behave nicely
-
-## Handle: organizing impure code
-
-In those cases, it is useful formulate some _best practices_ rather than laws
-
-These don't allow you to make optimizations or deductions, but it still helps
-people who are unfamiliar with the codebase to quickly find their way around
 
 ## Handle: organizing impure code
 
@@ -805,5 +827,28 @@ When talking about higher-order functions, we typically resort to things such as
 with `IO` code!
 
 Example: `resource-pool` package.
+
+## Handle: other approaches
+
+- Monad transformers
+- Effect handlers
+- Free monads
+- ...
+
+It's simple and it works everywhere™
+
+## Handle: other approaches
+
+```haskell
+-- | Create JSON-RPC session around conduits from transport layer.  When
+-- context exits session disappears.
+runJsonRpcT :: (MonadLoggerIO m, MonadBaseControl IO m)
+            => Ver                  -- ^ JSON-RPC version
+            -> Bool                 -- ^ Ignore incoming requests/notifs
+            -> Sink ByteString m () -- ^ Sink to send messages
+            -> Source m ByteString  -- ^ Source to receive messages from
+            -> JsonRpcT m a         -- ^ JSON-RPC action
+            -> m a                  -- ^ Output of action
+```
 
 # Questions?
