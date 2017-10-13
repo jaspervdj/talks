@@ -1,5 +1,5 @@
 ---
-title: 'Haskell in practice'
+title: 'Getting Things Done in Haskell'
 author: 'Jasper Van der Jeugt'
 date: 2017-09-26
 patat:
@@ -408,7 +408,8 @@ Programming:
 2. Whenever you can write _pure_ code, you should write pure code.  This pattern
    is only useful for when you can't.
 3. The main alternative to this approach is building complex monad transformer
-   stacks with `IO` at the bottom.  There are issues with those approaches.
+   stacks with `IO` at the bottom.  This has some advantages and some
+   disadvantages...
 
 ## Handle: module layout
 
@@ -837,6 +838,10 @@ createPool
     -> ...           -- ^ Some size/timeout parameters
     -> IO (Pool a)
 ```
+
+. . .
+
+Maybe Haskell really is the best imperative language!
 
 ## Handle: other approaches
 
