@@ -11,14 +11,12 @@ patat:
 
 ## About me
 
-Started using Haskell at university for pretty much everything
+Hi, I'm Jasper
 
-Have been working almost exclusively in Haskell for my entire career
-
-- Tsuru Capital (Algorithmic trading)
-- Erudify/Better (E-learning)
-- Bdellium (Retirement planning)
-- Fugue (Cloud orchestration)
+- Got started with Haskell a while ago
+- I use Haskell at work (Fugue)
+- I use Haskell in my free time (open source)
+- I try to be involved in the community (SoH, Zurihac)
 
 ## Goal of this talk
 
@@ -29,6 +27,10 @@ The path of the Haskell noob:
 2. Write some unix tools like `rev`
 3. ???
 4. Write a web application
+
+. . .
+
+Getting things done™
 
 ## Haskell pyramid
 
@@ -111,11 +113,8 @@ Deployment: not trivial
 
 . . .
 
-Conclusion: not really harder (or easier) than other languages.
-
-. . .
-
-Only _after_ deployment we can see if we did things right™
+Conclusion: not really harder (or easier) than other languages, but you need to
+get some things right (configuration, logging, ...).
 
 # Haskell's module system
 
@@ -124,7 +123,7 @@ Only _after_ deployment we can see if we did things right™
 Haskell's module system is one of the simplest there is:
 
 - Modules are hierarchical
-- Modules should not be cyclic
+- Modules should not be cyclic (but can be)
 - You can re-export module
 - You can import modules as a given name
 
@@ -550,7 +549,8 @@ instance Monoid Config where
 . . .
 
 ```haskell
-let config = mconcat [etcConfig, homeConfig, pwdConfig, optsConfig]
+let config = mconcat
+        [etcConfig, homeConfig, pwdConfig, optsConfig]
 ```
 
 ## Handle: creation
@@ -805,7 +805,7 @@ withHandle config logger = bracket (new config logger) close
 module MyApp.Database
     ( Config (..)
     , Handle
-    , withHandle  -- I'm not giving you new/close
+    , withHandle  -- Use .Internal for new/close
     , ...         -- Actual operations
     ) where
 ```
@@ -828,6 +828,16 @@ with `IO` code!
 
 Example: `resource-pool` package.
 
+## Handle: resource-pool
+
+```haskell
+createPool
+    :: IO a          -- ^ Action that creates a new resource.
+    -> (a -> IO ())  -- ^ Action that destroys an existing resource.
+    -> ...           -- ^ Some size/timeout parameters
+    -> IO (Pool a)
+```
+
 ## Handle: other approaches
 
 - Monad transformers
@@ -840,15 +850,16 @@ It's simple and it works everywhere™
 ## Handle: other approaches
 
 ```haskell
--- | Create JSON-RPC session around conduits from transport layer.  When
--- context exits session disappears.
-runJsonRpcT :: (MonadLoggerIO m, MonadBaseControl IO m)
-            => Ver                  -- ^ JSON-RPC version
-            -> Bool                 -- ^ Ignore incoming requests/notifs
-            -> Sink ByteString m () -- ^ Sink to send messages
-            -> Source m ByteString  -- ^ Source to receive messages from
-            -> JsonRpcT m a         -- ^ JSON-RPC action
-            -> m a                  -- ^ Output of action
+-- | Create JSON-RPC session around conduits from transport layer.
+-- When context exits session disappears.
+runJsonRpcT
+    :: (MonadLoggerIO m, MonadBaseControl IO m)
+    => Ver                  -- ^ JSON-RPC version
+    -> Bool                 -- ^ Ignore incoming requests/notifs
+    -> Sink ByteString m () -- ^ Sink to send messages
+    -> Source m ByteString  -- ^ Source to receive messages from
+    -> JsonRpcT m a         -- ^ JSON-RPC action
+    -> m a                  -- ^ Output of action
 ```
 
 # Questions?
