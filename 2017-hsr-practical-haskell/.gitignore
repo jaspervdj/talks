@@ -1,0 +1,12 @@
+hellofib
+hellofib.eventlog
+binary-trees
+binary-trees.aux
+binary-trees.hp
+binary-trees.pdf
+binary-trees.prof
+binary-trees.prof.html
+binary-trees.ps
+binary-trees.stderr
+*.hi
+*.o
