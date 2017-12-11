@@ -14,7 +14,7 @@ binary-trees.pdf: binary-trees.prof
 	ps2pdf binary-trees.ps
 
 binary-trees.prof: binary-trees
-	./binary-trees 15 +RTS -p -hy -s -RTS 2>binary-trees.stderr
+	./binary-trees 15 +RTS -p -h -s -RTS 2>binary-trees.stderr
 
 binary-trees:
 	stack exec ghc -- --make -auto-all -prof -rtsopts binary-trees.hs

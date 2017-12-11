@@ -131,6 +131,11 @@ What you need to write applications:
     - Haskell is _safe_
     - Haskell is _fast_
     - Haskell is _flexible_
+3. We will talk about:
+    - Tools
+    - Monoids
+    - Writing imperative code
+    - Bonus: Module system
 
 ## Sample application
 
@@ -539,7 +544,8 @@ Programming:
 2. Whenever you can write _pure_ code, you should write pure code.  This pattern
    is only useful for when you can't.
 3. The main alternative to this approach is building complex monad transformer
-   stacks with `IO` at the bottom.  There are issues with those approaches.
+   stacks with `IO` at the bottom.  This has some advantages and some
+   disadvantages...
 
 ## Handle: module layout
 
@@ -1010,3 +1016,260 @@ Fortunately, Haskell is not really a hammer, it's a toolbox!
 It can't do everything (there's still GC), but it's close.
 
 # Questions?
+
+# Haskell's module system
+
+## Haskell's module system
+
+Haskell's module system is one of the simplest there is:
+
+- Modules are hierarchical
+- Modules should not be cyclic (but can be)
+- You can re-export module
+- You can import modules as a given name
+
+And that's about all there is to it...
+
+## The classic organisation
+
+If you're building a command line tool:
+
+- Phase 1: `Main.hs`
+- Phase 2: `Main.hs`, `Types.hs`
+- Phase 3: `Main.hs`, `Types.hs`, `Util.hs`
+
+. . .
+
+Advantage: it's very clear where to put things (e.g. a type...)
+
+. . .
+
+Disadvantage: it doesn't scale very well...
+
+## A better organisation
+
+Rule of thumb: organise by _problem domain_ / _semantics_, not by kind.
+Recurse.
+
+- `Rev.Main`
+- `Rev.Reverse`
+- `Rev.Options`
+
+## Smell: Types modules
+
+I think having a `.Types` module is a Haskell antipattern.
+
+## Smell: Types modules
+
+Problem 1: Instances
+
+. . .
+
+Haskell asks you to put instances next to the corresponding types.  What if
+your instances use auxiliary functions?
+
+    Instances --(depend on)--> Functions --(depend on)--> Types
+
+. . .
+
+Problem!  This forces you to grow a 1000-line Types module which contains lots
+of functions (or use orphans).  Neither option is great.
+
+## Smell: Types modules
+
+Problem 2: Ad-hoc types
+
+. . .
+
+Use ad-hoc datatypes liberally!
+
+<https://jaspervdj.be/posts/2016-05-11-ad-hoc-datatypes.html>
+
+## Smell: Types modules
+
+Which is better?
+
+```haskell
+getMail :: T.Text -> Maybe (Either String (Either Html String))
+```
+
+. . .
+
+```haskell
+data GetMailResult
+    = MailNotFound
+    | MailError String
+    | MailHtml  Html
+    | MailPlain Text
+
+getMail :: Text -> GetMailResult
+```
+
+## Smell: Types modules
+
+Ad-hoc types can simplify business logic considerably and allow you to "split
+up" the problem into more parts.
+
+. . .
+
+Conclusion: Types belong with their problem domain
+
+## Smell: Types modules
+
+Problem: what about the following organisation?
+
+    Fugacious.Mail        -- Provides type, some simple functions
+    Fugacious.Mail.Parse  -- Provides parser
+
+But I want to be able to re-export `parseMail` from `Fugacious.Mail`...
+
+. . .
+
+    Fugacious.Mail.Internal  -- Provides type, some simple functions
+    Fugacious.Mail.Parse     -- Provides parser
+    Fugacious.Mail           -- Re-exports both
+
+## Smell: Types modules
+
+- `Internal` modules are not a code smell
+- `Internal` modules should _probably_ be exposed (but usage discouraged)
+- `Internal` modules can be nested, e.g.:
+
+        Fugacious.Mail.Internal        -- Provides type, some simple functions
+        Fugacious.Mail.Parse.Internal  -- Provides parser primitives
+        Fugacious.Mail.Parse           -- Provides parser
+        Fugacious.Mail                 -- Re-exports both
+
+## Smell: Utils module
+
+Every C++ codebase contains about as many string split functions as there are
+programmers in the team
+
+. . .
+
+The same is probably true for Haskell...
+
+. . .
+
+Presumably every function in `Foo.Utils` should really be in `Foo`.
+
+## Smell: Utils module
+
+Problems with `Utils`:
+
+1. I don't want to import both `Foo` and `Foo.Utils`
+2. I want to be able to find stuff
+3. I want related functions to be close to each other
+
+## Smell: Utils module
+
+It's usually obvious where we want to put domain-specific functions -- we put
+them right where they belong.
+
+But how about:
+
+- Orphan instances, e.g. `instance Binary (HashMap k v)`?
+- Non-domain-specific functions, e.g. `ByteString.replace`?
+
+## Smell: Utils module
+
+Solution:
+
+```haskell
+module Data.ByteString.Extended
+    ( module Data.ByteString  -- Important!
+    , replace
+    ) where
+
+import Data.ByteString
+
+replace :: ByteString -> ByteString -> ByteString -> ByteString
+replace = ...
+```
+
+## Smell: Utils module
+
+Solution:
+
+```haskell
+{-# OPTIONS_GHC -fno-warn-orphans #-}
+module Data.HashMap.Strict.Extended
+    ( module Data.HashMap.Strict
+    ) where
+
+import Data.HashMap.Strict
+import Data.Binary
+
+instance (Binary k, Binary v) => Binary (HashMap k v) where
+    ...
+```
+
+## Smell: Utils module
+
+Conclusion:
+
+- Lots of little extended modules
+- Excellent source for pull requests
+- Clear where everything should go: only one string split!
+
+<https://jaspervdj.be/posts/2015-01-20-haskell-design-patterns-extended-modules.html>
+
+## Smell: Utils module
+
+Bonus: `Prelude.Extended`, useful if you use certain functions all the time
+
+. . .
+
+```haskell
+module Prelude.Extended
+    ( module Prelude
+    , unsafePerformIO
+    ) where
+
+import Prelude
+import System.IO.Unsafe (unsafePerformIO)
+```
+
+## Naming and qualified imports
+
+Always design for qualified imports.
+
+    Fugacious.Mail.Parse  -- Exports 'parse', not 'parseMail'
+    Fugacious.Mail        -- Re-exports 'parse', not 'parseMail'
+
+## Naming and qualified imports
+
+Go style guide:
+
+> the further from its declaration that a name is used, the more descriptive the
+> name must be
+
+. . .
+
+In `Fugacious.Mail`:
+
+```haskell
+import Fugacious.Mail.Parse
+import qualified Data.Text as T
+
+fromByteString = parse . T.decodeUtf8
+```
+
+## Naming and qualified imports
+
+Go style guide:
+
+> the further from its declaration that a name is used, the more descriptive the
+> name must be
+
+. . .
+
+In `Fugacious.Web`:
+
+```haskell
+import qualified Fugacious.Mail as Mail
+
+push body = do
+    mail <- Mail.parse body
+    ...
+```
