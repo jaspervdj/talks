@@ -9,6 +9,15 @@ patat:
 
 # Introduction
 
+## Update: recording
+
+A recording of this talk if available here:
+
+<https://skillsmatter.com/skillscasts/10832-how-to-architect-medium-to-large-scale-haskell-applications>
+
+The slides are fairly concise in some places so I would recommend watching the
+video instead.
+
 ## About me
 
 Hi, I'm Jasper
