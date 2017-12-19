@@ -617,7 +617,7 @@ type Cat: {
     !#?^@
 }
 
-type Doc: {
+type Dog {
     age: int
 }
 ```
