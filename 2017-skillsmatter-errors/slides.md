@@ -961,7 +961,7 @@ This gives us roughly something like this:
 
     X because TypeOrigin
 
-    Y beacsue TypeOrigin
+    Y because TypeOrigin
 
 . . .
 
