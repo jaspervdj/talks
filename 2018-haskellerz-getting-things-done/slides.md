@@ -18,7 +18,7 @@ Hi, I'm Jasper
 - I use Haskell in my free time (open source)
 - I try to be involved in the community (SoH, Zurihac)
 
-## Goal of this talk
+## About this talk
 
 The path of the Haskell noob:
 
