@@ -1,0 +1,13 @@
+# Composable Infrastructure through FP
+
+At Fugue, we built our own statically typed DSL, Ludwig, to configure cloud
+infrastructure in a declarative way. The language features Hindley-Milner type
+inference, extensible records with row-type polymorphism and an intuitive
+JSON-like syntax.
+
+In this talk about the advantages that arise when we apply types and functional
+programming to Infrastructure-as-Code. Composability gives us easy testing and
+reuse of infrastructure patterns. We see how we can apply a variety of
+techniques to make the language accessible to people unfamiliar with similar
+languages. Finally we see how Policy-as-Code seamlessly integrates with the
+language.

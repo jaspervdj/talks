@@ -1,0 +1,225 @@
+% slides.tex
+\documentclass[aspectratio=169,20pt]{beamer}
+\usepackage{listings}
+\usepackage[utf8]{inputenc}
+\usepackage{cancel}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{pdfpages}
+\usepackage{amsmath}
+\usepackage{xcolor}
+
+\usetheme{default}
+\usecolortheme{dove}
+\useoutertheme{default}
+
+% Remove navigation symbols
+\setbeamertemplate{navigation symbols}{}
+
+% Slightly smaller title
+\setbeamerfont{frametitle}{size=\large}
+\setbeamerfont{verb}{size=\small}
+
+% Font
+\renewcommand{\ttdefault}{pcr}
+
+% lst settings
+\lstset{
+    basicstyle=\ttfamily\footnotesize,
+    gobble=4,
+    keywordstyle=\ttfamily\bfseries,
+    showstringspaces=false
+}
+
+\newcommand{\vspaced}{
+    \vspace{5mm}
+}
+
+\newcommand{\fullimageframe}[1]{
+    {
+        \usebackgroundtemplate{
+            \includegraphics[height=\paperheight,width=\paperwidth]{#1}}
+        \setbeamertemplate{navigation symbols}{}
+        \begin{frame}[plain]
+        \end{frame}
+    }
+}
+
+\newcommand{\imageframe}[1]{
+    {
+        \begin{frame}[plain]
+        \begin{center}
+        \includegraphics[width=\textwidth]{#1}
+        \end{center}
+        \end{frame}
+    }
+}
+
+\newcommand{\chapterslide}[1]{
+    {
+        \begin{frame}[plain]
+        \begin{center}
+        \large{#1}
+        \end{center}
+        \end{frame}
+    }
+}
+
+\newcommand{\blackslide}[1]{
+    {
+        \setbeamercolor{background canvas}{bg=black}
+        \chapterslide{\color[rgb]{1,1,1}{#1}}
+    }
+}
+
+\newcommand{\code}[1]{
+    \texttt{\small{#1}}
+}
+
+\definecolor{asparagus}{rgb}{0.53, 0.66, 0.42}
+\definecolor{bittersweet}{rgb}{1.0, 0.44, 0.37}
+
+\begin{document}
+
+\title{Composable Infrastructure through FP}
+\subtitle{Comcast Labs Connect FP conference}
+\author{Jasper Van der Jeugt}
+\date{March 6, 2016}
+
+\begin{frame}[plain]
+    \titlepage
+\end{frame}
+
+\begin{frame}{About me}
+    \begin{itemize}
+    \item Discovered FP at Uni, haven't looked back
+    \item Contributed to and authored open source projects
+    \item Worked with Haskell for some companies
+    \item Currently at Fugue
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{About this talk}
+    Part 0: Introduction \\
+    Part 1: Why FP? \\
+    Part 2: Accessible FP \\
+    Part 3: Policy-as-Code \\
+\end{frame}
+
+\begin{frame}{Fugue}
+    \emph{Fugue} is a cloud orchestration platform that offers a variety of
+    services \\
+    \vspaced
+    The single source of truth for Fugue is defined in a functional,
+    statically typed language called \emph{Ludwig} \\
+\end{frame}
+
+\begin{frame}{FP and Infrastructure}
+    This talk is about our experience with applying FP to this domain that
+    encompasses a few different topics such as compliance, DevOps, immutability
+    infrastructure\ldots
+\end{frame}
+
+\begin{frame}{FP and Infrastructure}
+    I'm using Ludwig as a case study but most things in this talk generalize to
+    other languages which share the traits we all love such as Hindley–Milner
+    type inference, referential transparency, immutability\ldots
+\end{frame}
+
+\chapterslide{Part 0: Why FP?}
+
+\begin{frame}[fragile]{Configuration is Hard}
+    \begin{lstlisting}
+    server {
+      listen      80;
+      server_name localhost;
+      location / {
+        root   html;
+        index  index.html index.htm;
+      }
+    }
+    \end{lstlisting}
+\end{frame}
+
+\blackslide{Two weeks later...}
+
+\begin{frame}[fragile]{Configuration is Hard}
+    \begin{lstlisting}
+    if ( $remote_addr != 10.11.12.13 ) {
+      set $check G;
+    }
+    if ( -f $document_root/maintenance.html){
+      set $check "${check}O";
+    }
+    if ( $check = GO ) {
+      return 503;
+    }
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Keeping it Simple\textsuperscript{\tiny{TM}} with YAML}
+    \begin{lstlisting}
+    - name: add my user
+      user:
+        name: "jasper"
+        state: present
+        groups: "wheel"
+    \end{lstlisting}
+\end{frame}
+
+\blackslide{Ten minutes later...}
+
+\begin{frame}[fragile]{Keeping it Simple\textsuperscript{\tiny{TM}} with YAML}
+    \begin{lstlisting}
+    - name: add several users
+      user:
+        name: "{{ item }}"
+        state: present
+        groups: "wheel"
+      with_items:
+         - testuser1
+         - testuser2
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Configuration is Hard}
+    \textbf{Greenspun's tenth rule of programming:} \\
+    \vspaced
+    \emph{Any sufficiently complicated C or Fortran program contains an ad-hoc,
+    informally-specified, bug-ridden, slow implementation of half of Common
+    Lisp.}
+\end{frame}
+
+\fullimageframe{images/cartesian-01.pdf}
+\fullimageframe{images/cartesian-02.pdf}
+
+\begin{frame}[fragile]{Keeping it Simple\textsuperscript{\tiny{TM}} with JSON}
+    \begin{lstlisting}
+    {
+      "server": {
+        "listen": 80,
+        "server_name": "localhost",
+        ...
+      }
+    }
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Keeping it Simple\textsuperscript{\tiny{TM}} with JSON}
+    A sane subset of JSON is already: \\
+    \vspaced
+    \begin{itemize}
+    \item \emph{Mostly} typed
+    \item Immutable
+    \end{itemize}
+    \vspaced
+
+\end{frame}
+
+\begin{frame}[fragile]{Keeping it Simple\textsuperscript{\tiny{TM}} with JSON}
+    \begin{lstlisting}
+
+
+\chapterslide{Questions?}
+
+\end{document}

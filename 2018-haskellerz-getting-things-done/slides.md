@@ -872,16 +872,6 @@ It's simple and it works everywhere™
 ## Handle: other approaches
 
 ```haskell
--- | Create JSON-RPC session around conduits from transport layer.
--- When context exits session disappears.
-runJsonRpcT
-    :: (MonadLoggerIO m, MonadBaseControl IO m)
-    => Ver                  -- ^ JSON-RPC version
-    -> Bool                 -- ^ Ignore incoming requests/notifs
-    -> Sink ByteString m () -- ^ Sink to send messages
-    -> Source m ByteString  -- ^ Source to receive messages from
-    -> JsonRpcT m a         -- ^ JSON-RPC action
-    -> m a                  -- ^ Output of action
 ```
 
 # Questions?
