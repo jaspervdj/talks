@@ -1,0 +1,4 @@
+:set -XDataKinds
+:set -fno-warn-missing-signatures
+:set +t
+:set prompt "> "
