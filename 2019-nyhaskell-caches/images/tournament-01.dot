@@ -1,0 +1,29 @@
+#include "dotmacrosfml.h"
+
+digraph {
+    POKEMON(l4_2, Bulbasaur, "pokemon/bulbasaur.png", 99, S, none)
+    l4_2 -> l3_2, l3_5;
+
+    POKEMON(l3_2, Bulbasaur, "pokemon/bulbasaur.png", 99, D, none)
+    l3_2 -> l2_2, l2_3;
+    POKEMON(l3_5, Lapras, "pokemon/lapras.png", 84, S, none)
+    l3_5 -> l2_5, l2_8;
+
+    POKEMON(l2_2, Bulbasaur, "pokemon/bulbasaur.png", 99, B, none)
+    l2_2 -> l1_1, l1_2;
+    POKEMON(l2_3, Cubone, "pokemon/cubone.png", 90, D, none)
+    l2_3 -> l1_3, l1_4;
+    POKEMON(l2_5, Lapras, "pokemon/lapras.png", 84, M, none)
+    l2_5 -> l1_5, l1_6;
+    POKEMON(l2_8, Snorlax, "pokemon/snorlax.png", 60, S, none)
+    l2_8 -> l1_7, l1_8;
+
+    POKEMON(l1_1, Arcanine, "pokemon/arcanine.png", 23, A, none)
+    POKEMON(l1_2, Bulbasaur, "pokemon/bulbasaur.png", 99, B, none)
+    POKEMON(l1_3, Cubone, "pokemon/cubone.png", 90, C, none)
+    POKEMON(l1_4, Drowzee, "pokemon/drowzee.png", 46, D, none)
+    POKEMON(l1_5, Lapras, "pokemon/lapras.png", 84, L, none)
+    POKEMON(l1_6, Metapod, "pokemon/metapod.png", 8, M, none)
+    POKEMON(l1_7, Pikachu, "pokemon/pikachu.png", 11, P, none)
+    POKEMON(l1_8, Snorlax, "pokemon/snorlax.png", 60, S, none)
+}

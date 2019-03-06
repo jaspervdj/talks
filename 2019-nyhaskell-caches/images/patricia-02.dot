@@ -1,0 +1,37 @@
+#include "dotmacrosfml.h"
+
+digraph {
+    l1_1 [shape=box, label=""];
+    l1_1 -> l2_1 [label="0"];
+    l1_1 -> l2_2 [label="1"];
+
+    l2_1 [shape=box, label=""];
+    l2_1 -> l3_1 [label="0"];
+    l2_1 -> l3_2 [label="1"];
+    l2_2 [shape=none, label=""];
+
+    l3_1 [shape=box, label=""];
+    l3_1 -> l4_1 [label="0"];
+    l3_1 -> l4_2 [label="1"];
+    l3_2 [shape=box, label=""];
+    l3_2 -> l4_3 [label="0"];
+    l3_2 -> l4_4 [label="1"];
+
+    l4_1 [shape=box, label=""];
+    l4_1 -> l5_1 [label="0"];
+    l4_1 -> l5_2 [label="1"];
+    l4_2 [shape=none, label=""];
+    l4_3 [shape=box, label=""];
+    l4_3 -> l5_5 [label="0"];
+    l4_3 -> l5_6 [label="1"];
+    l4_4 [shape=box, label=""];
+    l4_4 -> l5_7 [label="0"];
+    l4_4 -> l5_8 [label="1"];
+
+    BITS4(l5_1, Bulbasaur, "pokemon/bulbasaur.png", 99, 0, 0, 0, 0)
+    BITS4(l5_2, Lapras, "pokemon/lapras.png", 84, 0, 0, 0, 1)
+    l5_5 [shape=none, label=""];
+    BITS4(l5_6, Drowzee, "pokemon/drowzee.png", 46, 0, 1, 0, 1)
+    BITS4(l5_7, Arcanine, "pokemon/arcanine.png", 23, 0, 1, 1, 0)
+    l5_8 [shape=none, label=""];
+}

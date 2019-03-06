@@ -1,0 +1,8 @@
+#include "dotmacrosfml.h"
+
+digraph {
+    BITS4(l5_1, Bulbasaur, "pokemon/bulbasaur.png", 99, 0, 0, 0, 0)
+    BITS4(l5_2, Lapras, "pokemon/lapras.png", 84, 0, 0, 0, 1)
+    BITS4(l5_6, Drowzee, "pokemon/drowzee.png", 46, 0, 1, 0, 1)
+    BITS4(l5_7, Arcanine, "pokemon/arcanine.png", 23, 0, 1, 1, 0)
+}
