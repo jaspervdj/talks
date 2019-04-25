@@ -1,7 +1,7 @@
 ---
 title: 'Implementing Caches in Haskell'
 author: 'Jasper Van der Jeugt'
-date: 2019-03-06
+date: 2019-04-25
 patat:
   incrementalLists: true
   slideLevel: 2
@@ -56,7 +56,7 @@ calls to AWS when describing resources
 . . .
 
 According to my scientific™ estimates™, every application contains at least one
-of these for every 1000 lines of code
+of these for every 2000 lines of code
 
 About this talk
 ---------------
@@ -523,6 +523,16 @@ arbitraryPSQ = do
     actions    <- replicateM numActions arbitraryAction
     foldM (\t a -> apply a t) (empty :: psq Int v) actions
 ```
+
+IntPSQ: benchmarks
+-----------------
+
+How fast is `IntPSQ`?
+
+IntPSQ: benchmarks
+------------------
+
+![](images/ghc-intpsq.png)
 
 HashPSQ
 =======

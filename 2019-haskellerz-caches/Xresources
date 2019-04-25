@@ -1,0 +1,22 @@
+XTerm*font: xft:Iosevka:size=14
+
+XTerm*background:  #ffffff
+XTerm*foreground:  #000000
+XTerm*cursorColor: #5f87af
+
+XTerm*color0:      #000000
+XTerm*color8:      #000000
+XTerm*color1:      #af0000
+XTerm*color9:      #af0000
+XTerm*color2:      #008700
+XTerm*color10:     #008700
+XTerm*color3:      #af5f00
+XTerm*color11:     #af5f00
+XTerm*color4:      #005faf
+XTerm*color12:     #005faf
+XTerm*color5:      #870087
+XTerm*color13:     #870087
+XTerm*color6:      #008787
+XTerm*color14:     #008787
+XTerm*color7:      #ffffff
+XTerm*color15:     #ffffff

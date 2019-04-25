@@ -1,0 +1,20 @@
+#include "dotmacrosfml.h"
+
+digraph {
+    MASKBITS4(l1_1, _, X, _, _, Bulbasaur, "pokemon/bulbasaur.png", 99, 0, 0, 0, 0)
+    l1_1 -> l2_1 [label="0"];
+    l1_1 -> l2_2 [label="1"];
+
+    MASKBITS4(l2_1, _, _, _, X, Lapras, "pokemon/lapras.png", 84, 0, 0, 0, 1)
+    l2_1 -> l3_1 [label="0"];
+    l2_1 -> l3_2 [label="1"];
+
+    MASKBITS4(l2_2, _, _, X, _, Drowzee, "pokemon/drowzee.png", 46, 0, 1, 0, 1)
+    l2_2 -> l3_3 [label="0"];
+    l2_2 -> l3_4 [label="1"];
+
+    l3_1 [shape=none, label=""];
+    l3_2 [shape=none, label=""];
+    l3_3 [shape=none, label=""];
+    MASKBITS4(l3_4, _, _, _, X, Arcanine, "pokemon/arcanine.png", 23, 0, 1, 1, 0)
+}
