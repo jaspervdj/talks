@@ -1,0 +1,5 @@
+matplotlib==3.3.*
+Cartopy==0.18.*
+scipy==1.5.*
+geopy==2.0.*
+pyyaml==5.3.*

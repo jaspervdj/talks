@@ -1,0 +1,547 @@
+hackathons:
+- name: AusHac
+  location: Sydney
+  date: 2010-07-16
+  organizers:
+  - Alex Mason
+  - Ivan Miljenovic
+  projects:
+  - accelerate
+  - gloss
+  - leksah
+  - repa
+- name: AusHac
+  location: Sydney
+  date: 2011-07-08
+  organizers:
+  - Alex Mason
+  - Ivan Miljenovic
+  projects:
+  - ghc
+- name: Budapest Hackathon
+  location: Budapest
+  date: 2016-08-06
+  organizers:
+  - Dániel Berecz
+  - Csaba Hruska
+  - Péter Diviánszky
+  - Andor Pénzes
+  projects:
+  - ghc
+  - tasty
+- name: Budapest Hackathon
+  location: Budapest
+  date: 2017-07-29
+  organizers:
+  - Dániel Berecz
+  - Csaba Hruska
+  - Péter Diviánszky
+  - Andor Pénzes
+  projects:
+  - generics-sop
+- name: Budapest Hackathon
+  location: Budapest
+  date: 2014-05-31
+  organizers:
+  - Csaba Hruska
+  - Péter Diviánszky
+  projects:
+  - ghcjs
+  - LambdaCube
+- name: DHD UHac
+  location: Utrecht
+  date: 2020-04-20
+  organizers:
+  - Sean Leather
+  - Jurriën Stutterheim
+  - Jurriaan Hage
+  projects:
+  - generics
+  - ghc
+- name: Hac
+  location: Oxford
+  date: 2007-01-10
+  organizers:
+  - Don Stewart
+  - Duncan Coutts
+  - Ian Lynagh
+  projects:
+  - cabal
+  - darcs
+  - ghc
+  - ghc
+  - hackage
+- name: Hac II
+  location: Freiburg
+  date: 2007-10-05
+  organizers:
+  - Don Stewart
+  - Duncan Coutts
+  - Ian Lynagh
+  projects:
+  - bytestring
+  - darcs
+  - ghc
+  - mtl
+  - parsec
+  - quickcheck
+  link: https://wiki.haskell.org/Hac_2007_II
+- name: Hac Boston
+  location: Cambridge, Massachusetts
+  date: 2014-08-01
+  organizers:
+  - Edward Kmett
+  - Greg Hale
+  - Josh Cough
+  projects:
+  - ghc
+  - mtl
+  link: https://wiki.haskell.org/Hac_Boston
+- name: Hac φ
+  location: Philadelphia
+  date: 2016-10-21
+  organizers:
+  - Antal Spector-Zabusky
+  - Kenny Foner
+  projects:
+  - codeworld
+  - fltkhs
+  - ghc
+  - opaleye
+  link: https://wiki.haskell.org/Hac_φ
+- name: Hac φ
+  location: Philadelphia
+  date: 2009-07-24
+  organizers:
+  - Daniel Wagner
+  - Brent Yorgey
+  projects:
+  - binary
+  - diagrams
+  - happstack
+  - xmonad
+  link: https://wiki.haskell.org/Hac_φ_2009
+- name: Hac4
+  location: Gothenburg
+  date: 2008-04-11
+  organizers:
+  - Björn Bringert
+  - Duncan Coutts
+  - Ian Lynagh
+  - Jean-Philippe Bernardy
+  - Krasimir Angelov
+  - Lennart Kolmodin
+  - Thomas Schilling
+  projects:
+  - bytestring
+  - cabal
+  - wai
+  - yi
+  link: https://wiki.haskell.org/Hac4
+- name: Hac5
+  location: Utrecht
+  date: 2009-04-17
+  organizers:
+  - Andres Löh
+  - José Pedro Magalhães
+  - Sean Leather
+  - Eelco Lempsink
+  - Chris Eidhof
+  projects:
+  - containers
+  - darcs
+  - ghc
+  - haskell-platform
+  - leksah
+  - xmonad
+  - yi
+  link: https://wiki.haskell.org/Hac5
+- name: Hac7
+  location: Edinburgh
+  date: 2009-08-29
+  organizers:
+  - Eric Kow
+  - Dougal Stanton
+  projects: []
+  link: https://wiki.haskell.org/Hac7
+- name: HacPDX
+  location: Portland
+  date: 2009-09-25
+  organizers:
+  - Thomas DuBuisson
+  projects:
+  - criterion
+  - darcs
+  - ghc
+  - hdbc
+  - network
+  link: https://wiki.haskell.org/HacPDX
+- name: HacPDX
+  location: Portland
+  date: 2011-07-22
+  organizers:
+  - Thomas DuBuisson
+  - David Lazar
+  projects:
+  - hackage
+  link: https://wiki.haskell.org/HacPDX-II
+- name: HakkuTaikai
+  location: Tokyo
+  date: 2011-09-25
+  organizers:
+  - Liyang HU
+  - Zhenjiang HU
+  - Conrad Parker
+  projects:
+  - containers
+  - time
+  - unordered-containers
+  link: https://wiki.haskell.org/HakkuTaikai
+- name: MuniHac
+  location: Munich
+  date: 2016-09-02
+  organizers:
+  - Michael Adler
+  - Andres Löh
+  projects:
+  - cabal
+  - foundation
+  - ghc
+  - ghcjs
+  - leksah
+  - servant
+  link: https://munihac.de/2016.html
+- name: OdHac
+  location: Odessa
+  date: 2013-05-05
+  organizers:
+  - Roman Cheplyaka
+  projects:
+  - cabal
+  - fay
+  - hakyll
+  link: https://wiki.haskell.org/OdHac
+- name: ZuriHac
+  location: Zurich
+  date: 2010-03-19
+  organizers:
+  - Johan Tibell
+  - Cristophe Poucet
+  projects:
+  - binary
+  - blaze-html
+  - cabal
+  - darcs
+  - doctest
+  - haskell-platform
+  - leksah
+  link: https://wiki.haskell.org/ZuriHac2010
+- name: ZuriHac
+  location: Zurich
+  date: 2013-08-29
+  organizers:
+  - Alexander Bernauer
+  - Thomas Schilling
+  - Simon Meier
+  - Michela D'Amelio
+  - Dominic Small
+  - Ales Pospisil
+  - Bas van Dijk
+  projects:
+  - cabal
+  - fay
+  - haskell-src-exts
+  link: https://wiki.haskell.org/ZuriHac2013
+- name: ZuriHac
+  location: Zurich
+  date: 2014-06-06
+  organizers:
+  - Johan Tibell
+  - Alexander Bernauer
+  - Nora Kasper
+  - Thomas Schilling
+  - Simon Meier
+  - Dominic Small
+  - Bas van Dijk
+  projects:
+  - aeson
+  - hakyll
+  - snap
+  - hackage
+  - ghc
+  - diagrams
+  - LambdaCube
+  - opaleye
+  link: https://wiki.haskell.org/ZuriHac2014
+- name: ZuriHac
+  location: Zurich
+  date: 2015-05-29
+  organizers:
+  - Gleb Peregud
+  - Alexander Bernauer
+  - Johan Tibell
+  - Simon Meier
+  projects:
+  - LambdaCube
+  - cabal
+  - hackage
+  - darcs
+  - ghc
+  link: https://wiki.haskell.org/ZuriHac2015
+- name: ZuriHac
+  location: Zurich
+  date: 2016-07-22
+  organizers:
+  - Gleb Peregud
+  - Alexander Bernauer
+  - Simon Meier
+  - Ivan Kristo
+  - Jasper Van der Jeugt
+  - Arvin Moezzi
+  projects:
+  - agda
+  - cryptonite
+  - foundation
+  - hakyll
+  - opaleye
+  - hadrian
+  link: https://wiki.haskell.org/ZuriHac2016
+- name: ZuriHac
+  location: Zurich
+  date: 2019-06-14
+  organizers:
+  - Andreas Herrmann
+  - Arvin Moezzi
+  - Bieke Hoefkens
+  - Carl Baatz
+  - Farhad Mehta
+  - Gleb Peregud
+  - Ingrid Vettiger
+  - Ivan Kristo
+  - Jasper Van der Jeugt
+  - Juri Chome
+  - Martin Huschenbett
+  - Nicolas Gagliani
+  - Niklas Hambüchen
+  - Silvio Böhler
+  - Simon Meier
+  - Tomas Carnecky
+  projects:
+  - cabal
+  - clash
+  - darcs
+  - DataHaskell
+  - ghc
+  - grin
+  - haskell-ide-core
+  - hnix
+  - ihaskell
+  - massiv
+  - ormolu
+  - pandoc
+  - servant
+  - shake
+  link: https://zfoh.ch/zurihac2019/
+- name: ZuriHac
+  location: Zurich
+  date: 2017-06-09
+  organizers:
+  - Jasper Van der Jeugt
+  - Simon Meier
+  - Farhad Mehta
+  projects:
+  - hackage
+  - opaleye
+  - pandoc
+  - servant
+  link: https://2017.zurihac.info/
+- name: ZuriHac
+  location: Zurich
+  date: 2018-06-08
+  organizers:
+  - Andreas Herrmann
+  - Arvin Moezzi
+  - Carl Baatz
+  - Farhad Mehta
+  - Gleb Peregud
+  - Ingrid Vettiger
+  - Ivan Kristo
+  - Jasper Van der Jeugt
+  - Martin Huschenbett
+  - Nicolas Gagliani
+  - Niklas Hambüchen
+  - Simon Meier
+  - Tomas Carnecky
+  projects:
+  - arithmoi
+  - cabal
+  - dhall
+  - frege
+  - ghc
+  - ihaskell
+  - massiv
+  - pandoc
+  link: https://2018.zurihac.info/
+- name: HacFreiburg
+  location: Freiburg
+  date: 2017-08-04
+  organizers:
+  - Peter Thiemann
+  - Alexander Thiemann
+  - Stefan Wehr
+  projects:
+  - ghc
+  - haddock
+  - spock
+  link: https://wiki.haskell.org/HacFreiburg2017
+- name: BayHac
+  location: San Francisco
+  date: 2017-04-07
+  organizers:
+  - Dan Burton
+  projects:
+  - cabal
+  - clash
+  - codeworld
+  link: https://wiki.haskell.org/BayHac2017
+- name: Haskell eXchange Hackathon
+  location: London
+  date: 2016-09-08
+  organizers:
+  - Andres Löh
+  link: https://skillsmatter.com/conferences/8379-haskell-exchange-hackathon-2016
+- name: Haskell eXchange Hackathon
+  location: London
+  date: 2015-10-10
+  organizers:
+  - Andres Löh
+  - Derek Wright
+  link: https://wiki.haskell.org/LondonInfrastructureHac2015
+- name: Hac Boston
+  location: Boston
+  date: 2015-07-31
+  organizers:
+  - Josh Cough
+  - Greg Hale
+  link: https://www.meetup.com/Boston-Haskell/events/223607923/
+- name: Hac Berlin
+  location: Berlin
+  date: 2014-09-26
+  organizers:
+  - Stefan Wehr
+  - David Leuschner
+  link: https://wiki.haskell.org/HacBerlin2014
+- name: Hac Boston
+  location: Boston
+  date: 2014-08-01
+  organizers:
+  - Josh Cough
+  - Greg Hale
+  link: https://www.meetup.com/Boston-Haskell/events/184294502/
+- name: BayHac
+  location: San Francisco
+  date: 2014-05-16
+  organizers:
+  - Dan Burton
+  link: https://wiki.haskell.org/BayHac2014
+- name: BayHac
+  location: San Francisco
+  date: 2013-05-17
+  organizers:
+  - Dan Burton
+  - Mark Lentczner
+  link: https://wiki.haskell.org/BayHac2013
+- name: BayHac
+  location: San Francisco
+  date: 2012-04-20
+  organizers:
+  - Mark Lentczner
+  link: https://wiki.haskell.org/BayHac2012
+- name: CamHac
+  location: Cambridge, UK
+  date: 2011-08-12
+  organizers:
+  - Simon Marlow
+  link: https://wiki.haskell.org/CamHac
+- name: BayHac
+  location: San Francisco
+  date: 2011-02-11
+  organizers:
+  - Bryan O'Sullivan
+  - Mark Lentczner
+  link: https://wiki.haskell.org/BayHac2011
+- name: BelHac
+  location: Ghent
+  date: 2010-10-05
+  organizers:
+  - Jasper Van der Jeugt
+  - Andy Georges
+  - Kenneth Hoste
+  - Bart Coppens
+  link: https://wiki.haskell.org/Ghent_Functional_Programming_Group/BelHac
+- name: LtU-Kiev Hackathon
+  location: Kiev
+  date: 2010-10-16
+  organizers:
+  - Valery Vorotyntsev
+  link: https://wiki.haskell.org/LtU-Kiev/Hackathon
+- name: HaL3
+  location: Leipzig
+  date: 2008-04-19
+  organizers:
+  - Cetin Sert
+  link: https://wiki.haskell.org/HaL3
+- name: MuniHac
+  location: Munich
+  date: 2018-11-16
+  organizers:
+  - Franz Thoma
+  - Michael Adler
+  - Andres Löh
+  - David Luposchainsky
+  link: https://munihac.de/2018.html
+- name: MuniHac
+  location: Munich
+  date: 2019-09-06
+  organizers:
+  - Franz Thoma
+  - Andres Löh
+  link: https://munihac.de/2019.html
+- name: GHC hackathon
+  location: Portland
+  date: 2006-09-14
+  organizers:
+  - Simon Peyton Jones
+  - Simon Marlow
+  link: https://gitlab.haskell.org/ghc/ghc/-/wikis/hackathon
+- name: Bristol Haskell Hackathon
+  location: Bristol
+  date: 2020-01-25
+  organizers:
+  - Matthew Pickering
+  link: https://mpickering.github.io/bristol2020.html
+- name: ZuriHac
+  location: Zurich
+  date: 2020-06-12
+  organizers:
+  - Jasper Van der Jeugt
+  - Juri Chomé
+  - Farhad Mehta
+  - Bieke Hoefkens
+  link: https://zfoh.ch/zurihac2020/
+- name: BayHac
+  location: San Francisco
+  date: 2015-06-12
+  organizers:
+  - Greg Weber
+  link: https://www.reddit.com/r/haskell/comments/3557f6/bayhac_2015_is_june_1214_signup/
+- name: BayHac
+  location: San Francisco
+  date: 2018-04-27
+  organizers:
+  - Anthony Finch
+  - Chris Smith
+  - Dan Burton
+  - Erica Waichman
+  - Tikhon Jelvis
+  link: https://wiki.haskell.org/BayHac2018
