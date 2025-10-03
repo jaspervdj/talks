@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" href="interpreter.css" />
+    <script src="turnstyle.js" type="text/JavaScript"></script>
+    <style type="text/css">
+        html {
+            margin: 0px;
+            background-color: #f9f6ec;
+            color: #222;
+            font-family: sans-serif;
+        }
+
+        body {
+            margin: 0px;
+        }
+
+        div#slide-controls {
+            z-index: 2;
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 1vh;
+        }
+
+        div#slide-controls, div#slide-controls button {
+           font-size: 3vh;
+        }
+
+        div.slide {
+            z-index: 1;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            right: 0px;
+            bottom: 0px;
+
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            display: none;
+        }
+
+        div.slide.active {
+            display: flex;
+        }
+
+        h1 {
+            font-size: 14vh;
+            margin: 1vh;
+        }
+
+        h2 {
+            font-size: 8vh;
+            margin: 1vh;
+        }
+
+        p {
+            font-size: 5vh;
+            margin: 1vh 3vh;
+        }
+
+        table {
+            font-size: 4vh;
+        }
+
+        pre, ol, ul {
+            font-size: 4vh;
+        }
+
+        th {
+            padding-right: 4vh;
+            text-align: left;
+        }
+
+        img {
+            max-width: 90vh;
+            max-height: 90vh;
+        }
+    </style>
+    <script type="text/JavaScript">
+        const startTurnstyles = async (element) => {
+            const imgs = element.querySelectorAll("img.turnstyle");
+            const stopTurnstyles = [];
+            for (const img of imgs) {
+                const options = {
+                    annotatedView: {
+                        factor: 200,
+                    },
+                    terminal: {
+                    },
+                };
+                if (img.getAttribute("data-terminal") === "off") {
+                    options.terminal.enabled = false;
+                }
+                const itp = new Interpreter(document, img.src, options);
+                if (img.getAttribute("data-delay")) {
+                    const d = Number(img.getAttribute("data-delay"));
+                    if (!Number.isNaN(d)) {
+                        itp.delay = d;
+                    }
+                }
+                await itp.load();
+                img.replaceWith(itp.element);
+                itp.run();
+                stopTurnstyles.push(() => {
+                    itp.kill();
+                    itp.element.replaceWith(img);
+                });
+            }
+            return () => {
+                for (const stopTurnstyle of stopTurnstyles) stopTurnstyle();
+            };
+        };
+
+        window.onload = async () => {
+            const slides = document.querySelectorAll(".slide");
+            let activeSlide = 0;
+            let activeSlideStopTurnstyles = () => {};
+
+            const currentSlideSpan = document.getElementById("current-slide");
+
+            const setActiveSlide = async (n) => {
+                if (n < 0 || n >= slides.length) return;
+                activeSlideStopTurnstyles();
+                activeSlide = n;
+                for (let i = 0; i < slides.length; i++) {
+                    const slide = slides[i];
+                    if (i == activeSlide) {
+                        slide.classList.add("active");
+                        activeSlideStopTurnstyles = await startTurnstyles(slide);
+                    } else {
+                        slide.classList.remove("active");
+                    }
+                }
+                currentSlideSpan.innerText = `${n + 1} / ${slides.length}`;
+                window.location.hash = `#${n + 1}`;
+            };
+
+            const nextSlideButton = document.getElementById("next-slide");
+            const previousSlideButton = document.getElementById("previous-slide");
+            const replaySlideButton = document.getElementById("replay-slide");
+            nextSlideButton.addEventListener("click", () => {
+                setActiveSlide(activeSlide + 1);
+            });
+            previousSlideButton.addEventListener("click", () => {
+                setActiveSlide(activeSlide - 1);
+            });
+            replaySlideButton.addEventListener("click", () => {
+                setActiveSlide(activeSlide);
+            });
+            document.addEventListener("keydown", (event) => {
+                switch (event.key) {
+                    case "ArrowLeft":
+                        setActiveSlide(activeSlide - 1);
+                        break;
+                    case "ArrowRight":
+                        setActiveSlide(activeSlide + 1);
+                        break;
+                }
+            });
+
+            const parseLocationHash = () => {
+                if (!window.location.hash) return 0;
+                const n = Number(window.location.hash.substr(1));
+                return Number.isNaN(n) ? undefined : n - 1;
+            };
+
+            console.log(parseLocationHash());
+            const initialSlide = parseLocationHash() || 0;
+            setActiveSlide(initialSlide);
+        };
+    </script>
+    <title>Slides</title>
+  </head>
+  <body>
+    <div id="slide-controls">
+        <button id="previous-slide">←</button>
+        <span id="current-slide"></span>
+        <button id="replay-slide">⟳</button>
+        <button id="next-slide">→</button>
+    </div>
+    <div class="slide">
+        <h1>Turnstyle</h1>
+        <p>Jasper Van der Jeugt</p>
+        <p>HaskellerZ</p>
+        <p>October 2, 2025</p>
+    </div>
+    <div class="slide">
+        <!-- Started at ZuriHac 2024.  Idea is a functional Piet.  Why has
+        this not been done before?
+
+        I was first looking at using a square shape, but it was nicer to work
+        with something that has a natural "direction".
+
+        One I came up with the idea of using the turnstile shape, and the name
+        "Turnstyle", I knew there was no way back: you can't waste such a great
+        project name. -->
+        <img class="turnstyle" src="examples/pi.png">
+        <p>Correct-by-construction definition of π</p>
+    </div>
+    <div class="slide">
+        <!-- Four principles used for the design:
+
+        1. Clear, simple: spec should be short but unambigiuous.
+        2. You should be able to use this for "real" programs.
+        3. The coder should have a large amount of create freedom.
+        4. Integers are represented as sizes (as a nod to Piet).
+
+        Make sure to stress that the actual colors don't matter, we only
+        need an equality test to compare colors.  There are only 15
+        combinations. -->
+        <img src="images/cheatsheet.svg">
+    </div>
+    <div class="slide">
+        <!-- This is a really basic example that returns exit code 5.
+
+        You can see a couple of things here.  There are two App nodes.  We use
+        the "Identity" nodes to extend the legs.  Then we can read in a clock
+        wise order: Prim(3, 1), 2, 3.
+
+        Maybe you can see that you could make this program a bit more compact.
+        The 2 and 3 can sort of be merged, and so can the Prim(3, 1) and the
+        two.
+
+        lifthrasiir on HN -->
+        <p>Example: 2 + 3</p>
+        <p><em>((Prim(3, 1) 2) 3)</em></p>
+        <img class="turnstyle" src="examples/two-plus-three.png">
+    </div>
+    <div class="slide">
+        <!-- Here we hav have done those changes.  We end up with something that
+        is smaller but harder to decipher. -->
+        <p>Example: 2 + 3</p>
+        <p><em>((Prim(3, 1) 2) 3)</em></p>
+        <img class="turnstyle" src="examples/two-plus-three-opt.png">
+    </div>
+    <div class="slide">
+        <!-- I wanted it to be a language that could be used for real things,
+        not just toy examples, so I needed to use at least two numbers for
+        primitives, so it has a somewhat extensible "FFI" (does this make it
+        more practical than Elm?). -->
+        <table>
+            <tr><th>Module</th><th>Opcode</th><th>Primitive</th></tr>
+            <tr><td>1</td><td>1</td><td><code>((in_num k) l)</code></td></tr>
+            <tr><td>1</td><td>2</td><td><code>((in_char k) l)</code></td></tr>
+            <tr><td>2</td><td>1</td><td><code>((out_number x) k)</code></td></tr>
+            <tr><td>2</td><td>2</td><td><code>((out_char x) k)</code></td></tr>
+            <tr><td>3</td><td>1</td><td><code>((num_add x) y)</code></td></tr>
+            <tr><td>3</td><td>2</td><td><code>((num_sub x) y)</code></td></tr>
+            <tr><td>3</td><td>3</td><td><code>((num_mul x) y)</code></td></tr>
+            <tr><td>3</td><td>4</td><td><code>((num_div x) y)</code></td></tr>
+            <tr><td>3</td><td>5</td><td><code>((num_mod x) y)</code></td></tr>
+            <tr><td>4</td><td>1</td><td><code>((((cmp_eq x) y) t) f)</code></td></tr>
+            <tr><td>4</td><td>2</td><td><code>((((cmp_lt x) y) t) f)</code></td></tr>
+            <tr><td>4</td><td>3</td><td><code>((((cmp_gt x) y) t) f)</code></td></tr>
+            <tr><td>4</td><td>4</td><td><code>((((cmp_lte x) y) t) f)</code></td></tr>
+            <tr><td>4</td><td>5</td><td><code>((((cmp_gte x) y) t) f)</code></td></tr>
+            <tr><td>5</td><td>1</td><td><code>(inexact_sqrt x)</code></td></tr>
+        </table>
+    </div>
+    <div class="slide">
+        <!-- What else do you need to implement real problems?  You need a way
+        to loop.  In lambda calculus, this is traditionally done using a fixed
+        point combinator, the most well known would be the Y combinator. -->
+        <h2>Fixed point combinator</h2>
+        <p>How do you implement recursion with only lambdas?</p>
+        <p>&nbsp;</p>
+        <p><em>Y = λf. (λx. f (x x)) (λx. f (x x))</em></p>
+        <p>&nbsp;</p>
+        <p><em>Y program = program (Y program)</em></p>
+    </div>
+    <div class="slide">
+        <!-- rev (initially) stops at in_char and reference the spec.
+
+        Point out the Y combinator in the top left. -->
+        <img class="turnstyle" src="examples/rev.png">
+    </div>
+    <div class="slide">
+        <!-- We are reading characters until we encounter a newline.
+        As we do so, we are building a continuation that will call out_char on
+        the characters we read.  When we have a newline, we call that, followed
+        by printing a newline, and then recurse again with id (the "empty"
+        continuation). -->
+        <pre><code>
+LET y = λf. (λx. f (x x)) (λx. f (x x)) IN
+LET newline = 10 IN
+LET zero = num_sub 1 1 IN
+LET id = λx.x IN
+y (λrec acc.
+  in_char
+    (λc.
+      (cmp_eq c newline)
+      (acc (out_char newline (rec id)))
+      (rec (λfinal. (out_char c (acc final)))))
+    zero)
+  id
+        </code></pre>
+    </div>
+    <div class="slide">
+        <!-- Because of the 2D encoding, we can actually construct an expression
+        that loops back onto itself.  Imagine having an AST of lambda calculus
+        terms, but then instead of a tree, you have a possibly cyclic graph. -->
+        <img class="turnstyle" src="examples/loop.png">
+        <p>Look mum, no <em>Y</em>!</p>
+    </div>
+    <div class="slide">
+        <h2>Compiler</h2>
+        <ol>
+            <li>Generate color constraints (bounding box)</li>
+            <li>Optimize using simulated annealing</li>
+            <li>Find (minimal) coloring</li>
+        </ol>
+    </div>
+    <div class="slide">
+        <h2>Compiler</h2>
+        <pre><code>
+data ColorConstraint c p
+  = Eq p p
+  | NotEq p p
+  | LitEq c p
+        </pre></code>
+    </div>
+    <div class="slide">
+        <!-- Optimizes for:
+        1. Small size
+        2. Width and height should be similar
+        3. "Entrance" should be close to middle -->
+        <h2>Compiler</h2>
+        <pre><code>
+scoreLayout :: Ord v => Expr v -> Int
+scoreLayout expr =
+  let shape = exprToShape expr in
+  2 * (sWidth shape + sHeight shape) +
+  abs (sWidth shape - sHeight shape) +
+  4 * abs (sHeight shape `div` 2 -
+    sEntrance shape)
+        </pre></code>
+    </div>
+    <div class="slide">
+        <h2>Compiler</h2>
+        <pre><code>
+LET y = IMPORT @contaminate="true" "y.png" IN
+LET char_a = num_add (num_mul 10 9) 7 IN
+LET char_z = num_add char_a 25 IN
+LET and = λp q. p q p IN
+LET alpha = λn. and
+      (cmp_gt n (num_sub char_a 1))
+      (cmp_lt n (num_add 1 char_z)) IN
+LET rot13 = λn. (alpha n)
+      (num_add char_a (num_mod
+        (num_add 13 (num_sub n char_a)) 26))
+      n IN
+y (λrec. in_char (λn.
+  out_char (rot13 n) rec) (num_sub 1 1))
+        </pre></code>
+    </div>
+    <div class="slide">
+        <img class="turnstyle" data-delay="1" src="examples/rot13.png">
+    </div>
+    <div class="slide">
+        <img class="turnstyle" data-delay="1" src="examples/rot13-opt.png">
+    </div>
+    <!-- Future work for compiler: add loops? -->
+    <div class="slide">
+        <h1>Questions?</h1>
+    </div>
+  </body>
+</html>
